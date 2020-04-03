@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="55" id="KGk-i7-Jjw" customClass="AccessoryCell" customModule="MasterWorker" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="422" height="55"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="422" height="54.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eew-W4-JIA">
+                        <rect key="frame" x="10" y="5" width="42" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="Wdh-u7-Qsk"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VGQ-pG-4br" customClass="PPNumberButton" customModule="MasterWorker" customModuleProvider="target">
+                        <rect key="frame" x="292" y="0.0" width="120" height="50"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="50" id="cYW-Ep-39n"/>
+                            <constraint firstAttribute="width" constant="120" id="hOD-HK-ULX"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="eew-W4-JIA" secondAttribute="bottom" constant="5" id="66N-lv-91f"/>
+                    <constraint firstItem="VGQ-pG-4br" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="7On-wC-JYS"/>
+                    <constraint firstAttribute="trailing" secondItem="VGQ-pG-4br" secondAttribute="trailing" constant="10" id="Dxx-u1-Kj9"/>
+                    <constraint firstItem="eew-W4-JIA" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="SBr-l8-Kk5"/>
+                    <constraint firstItem="eew-W4-JIA" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Wwj-Qu-uwG"/>
+                    <constraint firstItem="eew-W4-JIA" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="wli-aF-c7S"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="lb_name" destination="eew-W4-JIA" id="k0e-je-Qs5"/>
+                <outlet property="pp_num" destination="VGQ-pG-4br" id="4fJ-qE-378"/>
+            </connections>
+            <point key="canvasLocation" x="134.78260869565219" y="131.58482142857142"/>
+        </tableViewCell>
+    </objects>
+</document>

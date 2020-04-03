@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tjj" translatesAutoresizingMaskIntoConstraints="NO" id="S38-Bv-gDq">
+                    <rect key="frame" x="157" y="405" width="100" height="86"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="S38-Bv-gDq" secondAttribute="height" multiplier="205:177" id="ULP-B9-tFZ"/>
+                        <constraint firstAttribute="width" constant="100" id="lZv-0w-49d"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="请点击添加地址按钮添加" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fOU-f7-IDI">
+                    <rect key="frame" x="128.5" y="496" width="157.5" height="17"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="fOU-f7-IDI" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="72A-dk-ZxD"/>
+                <constraint firstItem="S38-Bv-gDq" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="TBH-Zf-Xgg"/>
+                <constraint firstItem="fOU-f7-IDI" firstAttribute="top" secondItem="S38-Bv-gDq" secondAttribute="bottom" constant="5" id="XMv-Xs-hzC"/>
+                <constraint firstItem="S38-Bv-gDq" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="l7m-ug-BA1"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="-241" y="-56"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="tjj" width="200" height="200"/>
+    </resources>
+</document>

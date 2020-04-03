@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="166" id="KGk-i7-Jjw" customClass="CardTableViewCell" customModule="MasterWorker" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="406" height="166"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="406" height="166"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q0Q-Qb-CvN">
+                        <rect key="frame" x="0.0" y="0.0" width="406" height="160"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ndg-ER-DLj">
+                                <rect key="frame" x="10" y="10" width="386" height="140"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_avator" translatesAutoresizingMaskIntoConstraints="NO" id="h9N-Vn-H5x">
+                                        <rect key="frame" x="10" y="10" width="50" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="50" id="NqA-cL-XXf"/>
+                                            <constraint firstAttribute="height" constant="50" id="PRZ-Qb-COO"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="中国工商银行" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dvf-mf-JJz">
+                                        <rect key="frame" x="70" y="23.5" width="116.5" height="23"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="6215 *** **** 0963" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fkh-f5-zsK">
+                                        <rect key="frame" x="221" y="109.5" width="145" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="0.21673390570000001" blue="0.32569680839999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="140" id="6qb-ff-kNH"/>
+                                    <constraint firstItem="Dvf-mf-JJz" firstAttribute="centerY" secondItem="h9N-Vn-H5x" secondAttribute="centerY" id="745-Py-Tb3"/>
+                                    <constraint firstItem="h9N-Vn-H5x" firstAttribute="top" secondItem="ndg-ER-DLj" secondAttribute="top" constant="10" id="N7x-Cm-ODr"/>
+                                    <constraint firstItem="h9N-Vn-H5x" firstAttribute="leading" secondItem="ndg-ER-DLj" secondAttribute="leading" constant="10" id="T7G-rJ-wE2"/>
+                                    <constraint firstAttribute="bottom" secondItem="fkh-f5-zsK" secondAttribute="bottom" constant="10" id="ZcP-5D-Pnb"/>
+                                    <constraint firstAttribute="trailing" secondItem="fkh-f5-zsK" secondAttribute="trailing" constant="20" id="dMY-JX-XlV"/>
+                                    <constraint firstItem="Dvf-mf-JJz" firstAttribute="leading" secondItem="h9N-Vn-H5x" secondAttribute="trailing" constant="10" id="yOE-3v-SRw"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="ndg-ER-DLj" secondAttribute="trailing" constant="10" id="484-CD-PmO"/>
+                            <constraint firstAttribute="bottom" secondItem="ndg-ER-DLj" secondAttribute="bottom" constant="10" id="DJM-ft-vy4"/>
+                            <constraint firstItem="ndg-ER-DLj" firstAttribute="leading" secondItem="q0Q-Qb-CvN" secondAttribute="leading" constant="10" id="Swn-b8-sFx"/>
+                            <constraint firstAttribute="height" constant="160" id="Yxq-da-VfP"/>
+                            <constraint firstItem="ndg-ER-DLj" firstAttribute="top" secondItem="q0Q-Qb-CvN" secondAttribute="top" constant="10" id="hgc-oh-T6T"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="q0Q-Qb-CvN" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="O5C-IW-zQJ"/>
+                    <constraint firstItem="q0Q-Qb-CvN" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="k8q-r5-MYH"/>
+                    <constraint firstAttribute="trailing" secondItem="q0Q-Qb-CvN" secondAttribute="trailing" id="kia-RU-85X"/>
+                    <constraint firstAttribute="bottom" secondItem="q0Q-Qb-CvN" secondAttribute="bottom" id="uyR-4q-dYb"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="iv_img" destination="h9N-Vn-H5x" id="IuO-bz-r5Y"/>
+                <outlet property="lb_name" destination="Dvf-mf-JJz" id="7NV-wb-5oJ"/>
+                <outlet property="lb_num" destination="fkh-f5-zsK" id="DV7-WD-tVF"/>
+                <outlet property="uv_cell" destination="ndg-ER-DLj" id="820-nL-cum"/>
+            </connections>
+            <point key="canvasLocation" x="-56.521739130434788" y="36.160714285714285"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="default_avator" width="106" height="106"/>
+    </resources>
+</document>

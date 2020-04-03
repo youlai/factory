@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="80" id="KGk-i7-Jjw" customClass="LeftTableViewCell" customModule="StoryDemo" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="313" height="80"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="313" height="79.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kDo-gZ-92J">
+                        <rect key="frame" x="0.0" y="0.0" width="313" height="79.5"/>
+                        <constraints>
+                            <constraint firstAttribute="height" priority="999" constant="50" id="hFP-G9-bzD"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fLS-de-DDb">
+                        <rect key="frame" x="0.0" y="0.0" width="4" height="79.5"/>
+                        <color key="backgroundColor" red="1" green="0.29542566390000002" blue="0.22837162380000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="4" id="uak-yT-Npk"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ahB-jh-zbA">
+                        <rect key="frame" x="0.0" y="78.5" width="313" height="1"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="0.5" id="KXx-Aa-7RR"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ee1-gi-Xbs">
+                        <rect key="frame" x="312" y="0.0" width="1" height="79.5"/>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="0.5" id="vmn-Z5-rJy"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="ahB-jh-zbA" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="4MQ-3i-3ql"/>
+                    <constraint firstAttribute="trailing" secondItem="ee1-gi-Xbs" secondAttribute="trailing" id="5TA-tS-krE"/>
+                    <constraint firstItem="fLS-de-DDb" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="6t9-YP-Xlc"/>
+                    <constraint firstItem="kDo-gZ-92J" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="950-Lv-hed"/>
+                    <constraint firstAttribute="trailing" secondItem="kDo-gZ-92J" secondAttribute="trailing" id="AVK-0u-FM5"/>
+                    <constraint firstAttribute="bottom" secondItem="ahB-jh-zbA" secondAttribute="bottom" id="PrZ-yQ-E5l"/>
+                    <constraint firstAttribute="trailing" secondItem="ahB-jh-zbA" secondAttribute="trailing" id="SQP-Sw-dvI"/>
+                    <constraint firstAttribute="bottom" secondItem="kDo-gZ-92J" secondAttribute="bottom" id="Trv-PC-gKy"/>
+                    <constraint firstItem="fLS-de-DDb" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Uio-TB-RTD"/>
+                    <constraint firstAttribute="bottom" secondItem="ee1-gi-Xbs" secondAttribute="bottom" constant="0.5" id="V8B-2X-SQj"/>
+                    <constraint firstAttribute="bottom" secondItem="fLS-de-DDb" secondAttribute="bottom" constant="0.5" id="ZpT-jm-2yJ"/>
+                    <constraint firstItem="ee1-gi-Xbs" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="otg-Ah-5oa"/>
+                    <constraint firstItem="kDo-gZ-92J" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="xdo-HG-S1k"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="left_line" destination="fLS-de-DDb" id="3gS-Ms-UwB"/>
+                <outlet property="name" destination="kDo-gZ-92J" id="AAr-WO-XFn"/>
+                <outlet property="right_line" destination="ee1-gi-Xbs" id="DVu-QZ-SDD"/>
+            </connections>
+            <point key="canvasLocation" x="-20.5" y="66"/>
+        </tableViewCell>
+    </objects>
+</document>
