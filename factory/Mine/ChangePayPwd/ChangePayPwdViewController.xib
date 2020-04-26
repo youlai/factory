@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChangePayPwdViewController" customModule="MasterWorker" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChangePayPwdViewController" customModule="factory" customModuleProvider="target">
             <connections>
                 <outlet property="btn_submit" destination="8uJ-K8-aqz" id="S0M-WX-bmV"/>
                 <outlet property="lb_title" destination="I86-QN-LPz" id="E4B-z1-I3s"/>
@@ -16,6 +16,7 @@
                 <outlet property="tf_pwd" destination="3FX-sR-H5z" id="H3x-9x-G32"/>
                 <outlet property="tf_repwd" destination="w5l-ND-SC9" id="zcg-Df-ihj"/>
                 <outlet property="uv_back" destination="32v-pk-fMP" id="bt5-C1-Fqw"/>
+                <outlet property="uv_old" destination="4Ee-Ei-gX3" id="HBd-R1-TOg"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -143,7 +144,7 @@
                         <constraint firstAttribute="height" constant="60" id="PBi-R8-6D4"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                    <state key="normal" title="确认修改">
+                    <state key="normal" title="确认">
                         <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </state>
                 </button>
@@ -169,6 +170,6 @@
         </view>
     </objects>
     <resources>
-        <image name="left_arrow" width="29.333333969116211" height="54.666667938232422"/>
+        <image name="left_arrow" width="88" height="164"/>
     </resources>
 </document>

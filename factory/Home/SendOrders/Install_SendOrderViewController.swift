@@ -86,6 +86,8 @@ class Install_SendOrderViewController: UIViewController,LBXScanViewControllerDel
     var Extra="N"//是否加急 默认否
     var ExtraTime="0"//加急时间
     var ExtraFee="0"//加急费用
+    
+    var ContinueIssuing="0"//是否重复发单
 
     
     override func viewDidLoad() {
@@ -104,6 +106,7 @@ class Install_SendOrderViewController: UIViewController,LBXScanViewControllerDel
         check_nw.addOnClickListener(target: self, action: #selector(bnw))
         uv_choose_time.addOnClickListener(target: self, action: #selector(getTime))
         uv_scan.addOnClickListener(target: self, action: #selector(scan))
+        btn_submit.layer.cornerRadius=5
         btn_submit.addOnClickListener(target: self, action: #selector(submit))
         
         
@@ -300,7 +303,8 @@ class Install_SendOrderViewController: UIViewController,LBXScanViewControllerDel
             "IsRecevieGoods":flag3,
             "ExpressNo":ExpressNo,
             "MallID":"123456789",
-            "OrderSource":"IOS厂商端"
+            "OrderSource":"IOS厂商端",
+            "ContinueIssuing":ContinueIssuing
             ] as [String : Any]
         print(d)
         AlamofireHelper.post(url: AddOrder, parameters: d, successHandler: {[weak self](res)in
@@ -309,15 +313,71 @@ class Install_SendOrderViewController: UIViewController,LBXScanViewControllerDel
             if res["Data"]["Item1"].boolValue{
                 HUD.showText(res["Data"]["Item2"].stringValue)
                 ss.navigationController?.popViewController(animated: true)
+            }else{
+                if res["Data"]["Item2"].stringValue=="账户可用余额小于工单金额"{
+                    ss.toRecharge()
+                }else if res["Data"]["Item2"].stringValue=="该用户已有工单"{
+                    ss.showrepeat()
+                }else if res["Data"]["Item2"].stringValue=="保证金低于最低需缴纳金额"{
+                    ss.toMargin()
+                }else{
+                    HUD.showText(res["Data"]["Item2"].stringValue)
+                }
             }
         }){[weak self] (error) in
             HUD.dismiss()
             guard let ss = self else {return}
         }
     }
+
+    //MARK:余额不足是否前往充值
+    @objc func toRecharge(){
+            let alertVC : UIAlertController = UIAlertController.init(title: "账户可用余额小于工单金额,是否前往充值？", message: "", preferredStyle: .alert)
+        let falseAA : UIAlertAction = UIAlertAction.init(title: "取消", style: .cancel, handler: nil)
+        let trueAA : UIAlertAction = UIAlertAction.init(title: "确定", style: .default) { (alertAction) in
+            self.navigationController?.pushViewController(RechargeViewController(), animated: true)
+        }
+        alertVC.addAction(falseAA)
+        alertVC.addAction(trueAA)
+        self.present(alertVC, animated: true, completion: nil)
+    }
+    //MARK:重复发单提醒
+    @objc func showrepeat(){
+            let alertVC : UIAlertController = UIAlertController.init(title: "该用户已有工单，是否继续发单？", message: "", preferredStyle: .alert)
+        let falseAA : UIAlertAction = UIAlertAction.init(title: "取消", style: .cancel, handler: nil)
+        let trueAA : UIAlertAction = UIAlertAction.init(title: "确定", style: .default) { (alertAction) in
+            self.ContinueIssuing=""
+            self.submit()
+        }
+        alertVC.addAction(falseAA)
+        alertVC.addAction(trueAA)
+        self.present(alertVC, animated: true, completion: nil)
+    }
+    //MARK:未充值保证金是否前往充值
+    @objc func toMargin(){
+            let alertVC : UIAlertController = UIAlertController.init(title: "保证金低于最低需缴纳金额,是否前往缴纳保证金？", message: "", preferredStyle: .alert)
+        let falseAA : UIAlertAction = UIAlertAction.init(title: "取消", style: .cancel, handler: nil)
+        let trueAA : UIAlertAction = UIAlertAction.init(title: "确定", style: .default) { (alertAction) in
+            self.navigationController?.pushViewController(MarginViewController(), animated: true)
+        }
+        alertVC.addAction(falseAA)
+        alertVC.addAction(trueAA)
+        self.present(alertVC, animated: true, completion: nil)
+    }
 }
 //MARK:选择品牌
 extension Install_SendOrderViewController{
+    //MARK:未添加品牌是否去添加品牌
+    @objc func noBrand(){
+        let alertVC : UIAlertController = UIAlertController.init(title: "你还未添加品牌，是否去添加？", message: "", preferredStyle: .alert)
+        let falseAA : UIAlertAction = UIAlertAction.init(title: "取消", style: .cancel, handler: nil)
+        let trueAA : UIAlertAction = UIAlertAction.init(title: "确定", style: .default) { (alertAction) in
+            self.navigationController?.pushViewController(BrandViewController(), animated: true)
+        }
+        alertVC.addAction(falseAA)
+        alertVC.addAction(trueAA)
+        self.present(alertVC, animated: true, completion: nil)
+    }
     @objc func getFactoryBrandByUserID(){
         let d = ["UserID":UserID!]
         AlamofireHelper.post(url: GetFactoryBrandByUserID, parameters: d, successHandler: {[weak self](res)in
@@ -326,6 +386,10 @@ extension Install_SendOrderViewController{
             ss.popviewOfBrand = ZXPopView.init(frame: ss.view.bounds)
             ss.chooseBrandView=Bundle.main.loadNibNamed("ChooseBrandView", owner: nil, options: nil)?[0] as? ChooseBrandView
             ss.chooseBrandView.brandList=res["Data"].arrayValue.compactMap({ BrandOfxgy(json: $0)})
+            if ss.chooseBrandView.brandList.count==0{
+                ss.noBrand()
+                return
+            }
             ss.chooseBrandView.tableview.reloadData()
             ss.chooseBrandView.tableview.separatorStyle = .none
             ss.chooseBrandView.brandSelect={ (brand:BrandOfxgy) -> Void in
@@ -358,6 +422,17 @@ extension Install_SendOrderViewController{
 }
 //MARK:选择型号
 extension Install_SendOrderViewController{
+    //MARK:未添加型号是否去添加型号
+    @objc func noType(){
+        let alertVC : UIAlertController = UIAlertController.init(title: "你该品牌下未添加型号，是否去添加？", message: "", preferredStyle: .alert)
+        let falseAA : UIAlertAction = UIAlertAction.init(title: "取消", style: .cancel, handler: nil)
+        let trueAA : UIAlertAction = UIAlertAction.init(title: "确定", style: .default) { (alertAction) in
+            self.navigationController?.pushViewController(TypeViewController(), animated: true)
+        }
+        alertVC.addAction(falseAA)
+        alertVC.addAction(trueAA)
+        self.present(alertVC, animated: true, completion: nil)
+    }
     @objc func getType(){
         if brand==nil {
             HUD.showText("请先选择品牌！")
@@ -372,6 +447,10 @@ extension Install_SendOrderViewController{
             ss.popviewOfType = ZXPopView.init(frame: ss.view.bounds)
             ss.chooseTypeView=Bundle.main.loadNibNamed("ChooseTypeView", owner: nil, options: nil)?[0] as? ChooseTypeView
             ss.chooseTypeView.cateList=res["Data"]["Item2"].arrayValue.compactMap({ CateOfxgy(json: $0)})
+            if ss.chooseTypeView.cateList.count==0{
+                ss.noType()
+                return
+            }
             ss.chooseTypeView.tableview.reloadData()
             ss.chooseTypeView.tableview.separatorStyle = .none
             ss.chooseTypeView.cateSelect={ (cate:CateOfxgy) -> Void in

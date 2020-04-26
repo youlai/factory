@@ -98,7 +98,7 @@ class BindPhoneViewController: UIViewController {
         let d = [
             "mobile":name,
             "type":"1",
-            "roleType":"worker"
+            "roleType":"factory"
             ] as [String : String]
         AlamofireHelper.post(url: GetCode, parameters: d, successHandler: {[weak self](res)in
             HUD.dismiss()
@@ -130,7 +130,7 @@ class BindPhoneViewController: UIViewController {
                  "openid":wx_info.openid!,
                  "unionid":wx_info.unionid!,
                  "code":code,
-                 "roleType":"worker"
+                 "roleType":"factory"
             ] as [String : String]
         print(d)
         AlamofireHelper.post(url: WxReg, parameters: d, successHandler: {[weak self](res)in

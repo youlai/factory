@@ -39,38 +39,26 @@ class V3_OrderViewController: TabmanViewController,PageboyViewControllerDataSour
     //    }
     var vcs:[UIViewController]! = []
     var index:Int!
-    var titles = ["待确认","已接待预约", "服务中", "待审核"
-        , "待返件", "质保单", "完成待取机",
-          "已完成","预约不成功"]
-    let statuses = [9,1,2,3,8,4,5,6,7]
-    /*
-     * 师傅端获取工单列表新接口
-     * 师傅端state
-     9、远程费申请待确认
-     0、待接单
-     1、已接待预约
-     2、服务中
-     3、返件单
-     4、质保单
-     5、完成待取机
-     6、已完成
-     7、预约不成功
-     8、配件单
-     * */
+    var titles = ["急需处理","待完成", "星标工单", "已完成"
+        , "质保单", "退单处理", "所有工单"]
+    //    "急需处理", "待完成", "星标工单"11, "已完成", "质保单"4, "退单处理","所有工单"5
+    //    "远程费审核"9,"配件审核"1,"待寄件"10,"留言"15
+    //    "30日内"16,"30日以上"17
+    //    "待支付"2,"已支付"3
+    //    "取消工单"13,"关闭工单"12
     override func viewDidLoad() {
         super.viewDidLoad()
         self.index=0
-        navigationBarNumber()
         //        for index in statuses{
         //              vcs.append(V3_OrderTableViewController(status: index))
         //        }
         vcs.append(SubOrderViewController())
-        vcs.append(V3_OrderTableViewController2(status: 1))
-        vcs.append(V3_OrderTableViewController3(status: 2))
+        vcs.append(SubOrderViewController2())
         vcs.append(V3_OrderTableViewController3(status: 11))
-        vcs.append(V3_OrderTableViewController3(status: 8))
-        vcs.append(V3_OrderTableViewController3(status: 12))
-        vcs.append(V3_OrderTableViewController3(status: 6))
+        vcs.append(SubOrderViewController3())
+        vcs.append(V3_OrderTableViewController3(status: 4))
+        vcs.append(SubOrderViewController4())
+        vcs.append(V3_OrderTableViewController3(status: 5))
         self.dataSource = self
         
         // Create bar
@@ -87,11 +75,11 @@ class V3_OrderViewController: TabmanViewController,PageboyViewControllerDataSour
         //        }))
         Tbar.buttons.customize { (button) in
             button.tintColor = .black
-            button.selectedTintColor = "#048CFF".color()
+            button.selectedTintColor = .red
             button.font=UIFont.systemFont(ofSize: 16)
         }
         
-        Tbar.indicator.tintColor = "#048CFF".color()
+        Tbar.indicator.tintColor = .red
         Tbar.indicator.weight = .custom(value: 1)
         Tbar.layout.contentMode = .intrinsic
         //        Tbar.tintColor = .white
@@ -112,132 +100,62 @@ class V3_OrderViewController: TabmanViewController,PageboyViewControllerDataSour
         self.view.backgroundColor=UIColor.white
         self.view.tintColor = .white
         //MARK:接收通知
-        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("接单成功"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("预约成功"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("预约不成功"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("已完成"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("待返件"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("待审核"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("工单数量"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("确认收货"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("待寄件"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("待支付"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("已完成"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("所有工单"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("急需处理"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("待完成"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("星标工单"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("质保单"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("退单处理"), object: nil)
     }
     //MARK:接收通知刷新接单列表
     @objc func reload(noti:Notification){
-        if noti.name.rawValue=="确认收货"{
-            self.index=0
-            navigationBarNumber()
-        }
-        if noti.name.rawValue=="接单成功"{
-            self.index=1
-            navigationBarNumber()
-        }
+//        vcs.removeAll()
+//        vcs.append(SubOrderViewController())
+//        vcs.append(SubOrderViewController2())
+//        vcs.append(V3_OrderTableViewController3(status: 2))
+//        vcs.append(SubOrderViewController3())
+//        vcs.append(V3_OrderTableViewController3(status: 11))
+//        vcs.append(SubOrderViewController4())
+//        vcs.append(V3_OrderTableViewController3(status: 8))
         if noti.name.rawValue=="待审核"{
+            self.index=0
+        }
+        if noti.name.rawValue=="待寄件"{
+            self.index=0
+        }
+        if noti.name.rawValue=="待支付"{
+            self.index=3
+        }
+        if noti.name.rawValue=="已完成"{
+            self.index=3
+        }
+        if noti.name.rawValue=="所有工单"{
+            self.index=6
+        }
+        if noti.name.rawValue=="急需处理"{
+            self.index=0
+        }
+        if noti.name.rawValue=="待完成"{
+            self.index=1
+        }
+        if noti.name.rawValue=="星标工单"{
             self.index=2
-            navigationBarNumber()
         }
-        if noti.name.rawValue=="预约成功"{
-            self.index=2
-            navigationBarNumber()
+        if noti.name.rawValue=="质保单"{
+            self.index=4
         }
-        if noti.name.rawValue=="工单数量"{
-            let orderStatus=noti.object as! Int
-            switch orderStatus {
-            case 13:
-                self.index=0
-            case 14:
-                self.index=0
-            case 15:
-                self.index=0
-            case 1:
-                self.index=1
-            case 16:
-                self.index=1
-            case 2:
-                self.index=2
-            case 11:
-                self.index=3
-            case 8:
-                self.index=4
-            case 12:
-                self.index=5
-            case 6:
-                self.index=6
-            default:
-                self.index=0
-            }
-            navigationBarNumber()
+        if noti.name.rawValue=="退单处理"{
+            self.index=5
         }
-        vcs.removeAll()
-        vcs.append(V3_OrderTableViewController(status: 13))
-        vcs.append(V3_OrderTableViewController2(status: 1))
-        vcs.append(V3_OrderTableViewController3(status: 2))
-        vcs.append(V3_OrderTableViewController3(status: 11))
-        vcs.append(V3_OrderTableViewController3(status: 8))
-        vcs.append(V3_OrderTableViewController3(status: 12))
-        vcs.append(V3_OrderTableViewController3(status: 6))
         self.reloadData()
     }
     @objc func back(){
         self.navigationController?.popViewController(animated: true)
     }
-    //    {
-    //      "Info" : "请求(或处理)成功",
-    //      "StatusCode" : 200,
-    //      "Data" : {
-    //        "Item1" : true,
-    //        "Item2" : {
-    //          "Count4" : 0,
-    //          "Count6" : 1,
-    //          "Count2" : 0,
-    //          "Count3" : 5,
-    //          "Count5" : 1,
-    //          "Count1" : 0
-    //        }
-    //      }
-    //    }
-    /**
-     * 各工单数量
-     * var Count1 = 0;//待处理数量
-     * var Count2 = 0;//待预约数量
-     * var Count3 = 0;//待服务数量
-     * var Count4 = 0;//待寄件数量
-     * var Count5 = 0;//待返件数量
-     * var Count6 = 0;//待结算数量
-     * */
-    @objc func navigationBarNumber(){
-        let d = ["UserID":UserID,
-                 "page":"1",
-                 "limit":"10"
-            ] as! [String : String]
-        AlamofireHelper.post(url: NavigationBarNumber, parameters: d, successHandler: {[weak self](res)in
-            HUD.dismiss()
-            guard let ss = self else {return}
-            ss.titles=[
-                "待处理(\(res["Data"]["Item2"]["Count1"]))",
-                "待预约(\(res["Data"]["Item2"]["Count2"]))",
-                "待服务(\(res["Data"]["Item2"]["Count3"]))",
-                "待寄件(\(res["Data"]["Item2"]["Count4"]))",
-                "待返件(\(res["Data"]["Item2"]["Count5"]))",
-                "待结算(\(res["Data"]["Item2"]["Count6"]))",
-                "已完结(\(res["Data"]["Item2"]["Count7"]))"
-            ]
-            ss.reloadData()
-        }){[weak self] (error) in
-            HUD.dismiss()
-            guard let ss = self else {return}
-        }
-    }
-    
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
 }
 struct mOrder {
     var SendOrderList = [mSendOrderList]()
@@ -377,6 +295,8 @@ struct mOrder {
     var ServiceMoney: Int = 0
     var AudDate: String?
     var LoginUser: String?
+    var FStarOrder: String?
+    var AccessoryAndServiceApplyState: String?
     
     init(json: JSON) {
         SendOrderList = json["SendOrderList"].arrayValue.compactMap({ mSendOrderList(json: $0)})
@@ -498,6 +418,8 @@ struct mOrder {
         ServiceMoney = json["ServiceMoney"].intValue
         AudDate = json["AudDate"].stringValue
         LoginUser = json["LoginUser"].stringValue
+        FStarOrder = json["FStarOrder"].stringValue
+        AccessoryAndServiceApplyState = json["AccessoryAndServiceApplyState"].stringValue
     }
 }
 

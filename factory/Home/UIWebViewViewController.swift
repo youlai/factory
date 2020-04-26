@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import WebKit
 
 class UIWebViewViewController: UIViewController {
     @IBOutlet weak var uv_close: UIView!
     @IBOutlet weak var uv_back: UIView!
     @IBOutlet weak var lb_title: UILabel!
-    @IBOutlet weak var webview: UIWebView!
+    @IBOutlet weak var webview: WKWebView!
     var headtitle: String!
     var url:String!
     var type:Int!
@@ -29,7 +30,6 @@ class UIWebViewViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         lb_title.text=headtitle
-        
         // 下面一行代码意思是充满的意思(一定要加，不然也会显示有问题)
         webview.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 //        let mapwayURL = URL(string: url)!
@@ -55,7 +55,7 @@ class UIWebViewViewController: UIViewController {
         case 0:
             let mapwayURL = URL(string: url)!
             let mapwayRequest = URLRequest(url: mapwayURL)
-            webview.loadRequest(mapwayRequest)
+            webview.load(mapwayRequest)
         default:
             webview.loadHTMLString(url, baseURL: nil)
         }

@@ -29,7 +29,7 @@ public class popPayPwdView: UIView, UITextFieldDelegate {
     }
     //weak弱引用delegate
     public weak var delegate: popPayDelegate?
-
+    
     var overlayView: UIControl!
     var payCodeTextField: CodeTextField!
     var moneyLabel:UILabel!
@@ -47,7 +47,7 @@ public class popPayPwdView: UIView, UITextFieldDelegate {
         self.backgroundColor = UIColor.white
         overlayView = UIControl(frame: UIScreen.main.bounds)
         overlayView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
-//        overlayView.addTarget(self, action: "dismiss", forControlEvents: UIControlEvents.TouchUpInside)
+        //        overlayView.addTarget(self, action: "dismiss", forControlEvents: UIControlEvents.TouchUpInside)
         let titleLabel = UILabel(frame: CGRect(x: 40, y: 0, width: self.frame.width - 80, height: 44))
         titleLabel.text = "请输入支付密码"
         titleLabel.textAlignment = .center
@@ -69,14 +69,14 @@ public class popPayPwdView: UIView, UITextFieldDelegate {
         withDrawLabel.textAlignment = .center
         withDrawLabel.font      = UIFont.systemFont(ofSize: 13)
         withDrawLabel.textColor = UIColor.black
-        self.addSubview(withDrawLabel)
+        //        self.addSubview(withDrawLabel)
         
         moneyLabel = UILabel(frame: CGRect(x: 0, y: 72, width: self.frame.width, height: 58))
         moneyLabel.text = "￥0.00"
         moneyLabel.textAlignment = .center
         moneyLabel.font      = UIFont.systemFont(ofSize: 40)
         moneyLabel.textColor = UIColor.black
-        self.addSubview(moneyLabel)
+        //        self.addSubview(moneyLabel)
         
         payCodeTextField = CodeTextField(frame: CGRect(x: 12, y: self.frame.height - 51, width: self.frame.width - 24, height: 36))
         payCodeTextField.backgroundColor = UIColor.white
@@ -124,7 +124,7 @@ public class popPayPwdView: UIView, UITextFieldDelegate {
     func setMoney(money:String){
         moneyLabel.text=money
     }
-
+    
     @objc func cancelBtnPressed() {
         self.dismiss()
     }
@@ -132,37 +132,37 @@ public class popPayPwdView: UIView, UITextFieldDelegate {
     public func fadeIn() {
         UIView.animate(withDuration: 0.25, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: { () -> Void in
             self.frame.origin.y = (SCREEN_SIZE_HEIGHT - self.frame.size.height) / 2 + 30
+        }, completion: { (finished: Bool) -> Void in
+            UIView.animate(withDuration: 0.1, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: { () -> Void in
+                self.frame.origin.y -= 30
             }, completion: { (finished: Bool) -> Void in
-                UIView.animate(withDuration: 0.1, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: { () -> Void in
-                    self.frame.origin.y -= 30
+                UIView.animate(withDuration: 0.05, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: { () -> Void in
+                    self.frame.origin.y += 10
+                }, completion: { (finished: Bool) -> Void in
+                    UIView.animate(withDuration: 0.05, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: { () -> Void in
+                        self.frame.origin.y -= 5
                     }, completion: { (finished: Bool) -> Void in
-                        UIView.animate(withDuration: 0.05, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: { () -> Void in
-                            self.frame.origin.y += 10
-                            }, completion: { (finished: Bool) -> Void in
-                                UIView.animate(withDuration: 0.05, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: { () -> Void in
-                                    self.frame.origin.y -= 5
-                                    }, completion: { (finished: Bool) -> Void in
-                                        
-                                })
-                        })
+                        
+                    })
                 })
+            })
         })
     }
     
     public func fadeOut() {
         UIView.animate(withDuration: 0.25, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: { () -> Void in
             self.frame.origin.y += 30
+        }, completion: { (finished: Bool) -> Void in
+            UIView.animate(withDuration: 0.25, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: { () -> Void in
+                self.frame.origin.y = -self.frame.size.height
+                self.overlayView.alpha = 0.01
             }, completion: { (finished: Bool) -> Void in
-                UIView.animate(withDuration: 0.25, delay: 0, options: UIView.AnimationOptions.curveEaseInOut, animations: { () -> Void in
-                    self.frame.origin.y = -self.frame.size.height
-                    self.overlayView.alpha = 0.01
-                    }, completion: { (finished: Bool) -> Void in
-                        if finished {
-                            self.payCodeTextField.resignFirstResponder()
-                            self.overlayView.removeFromSuperview()
-                            self.removeFromSuperview()
-                        }
-                })
+                if finished {
+                    self.payCodeTextField.resignFirstResponder()
+                    self.overlayView.removeFromSuperview()
+                    self.removeFromSuperview()
+                }
+            })
         })
     }
     
@@ -178,11 +178,11 @@ public class popPayPwdView: UIView, UITextFieldDelegate {
     public func dismiss() {
         fadeOut()
     }
-
+    
     @objc func textFieldDidChange() {
         let length = payCodeTextField.text!.count
         if length == passWordLength {
-//            dismiss()
+            //            dismiss()
             delegate?.compareCode(view: self, payCode: payCodeTextField.text!)
         }
         for i in 0 ..< passWordLength{
@@ -193,5 +193,13 @@ public class popPayPwdView: UIView, UITextFieldDelegate {
         }
         payCodeTextField.sendActions(for: .valueChanged)
     }
-
+    @objc func dot_hidden() {
+        payCodeTextField.text=""
+        for i in 0 ..< passWordLength{
+            dotLabel = payCodeTextField.viewWithTag(dotTag + i) as? UILabel
+            if (dotLabel != nil) {
+                dotLabel!.isHidden = true
+            }
+        }
+    }
 }

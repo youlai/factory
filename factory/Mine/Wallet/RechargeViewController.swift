@@ -81,16 +81,18 @@ class RechargeViewController: UIViewController {
         if payway==1{
             payway=2
             check_alipay.image=UIImage(named: "pay_uncheck")
-            check_wechat.image=UIImage(named: "pay_checked")
+            check_wechat.image=UIImage(named: "yuangou")
         }else{
             payway=1
-            check_alipay.image=UIImage(named: "pay_checked")
+            check_alipay.image=UIImage(named: "yuangou")
             check_wechat.image=UIImage(named: "pay_uncheck")
         }
     }
+    //MARK:支付宝信息
     func getOrderStr(){
         let d = ["UserID":UserID!,
                  "TotalAmount":money!,
+//                 "TotalAmount":"0.01",
                  "Type":"1",
             ] as [String : Any]
         print(d)
@@ -99,7 +101,7 @@ class RechargeViewController: UIViewController {
             guard let ss = self else {return}
             if res["Data"]["Item1"].boolValue{
                 let orderString=res["Data"]["Item2"].stringValue
-                let appScheme="xigyu"
+                let appScheme="xigyucs"
                 AlipaySDK.defaultService().payOrder(orderString, fromScheme: appScheme){
                     result in
                 }
@@ -109,11 +111,12 @@ class RechargeViewController: UIViewController {
             guard let ss = self else {return}
         }
     }
+    //MARK:微信信息
     func getWXOrderStr(){
         let d = ["UserID":UserID!,
                  "TotalAmount":money!,
                  "Type":"1",
-                 "Style":"iosmall"
+                 "Style":"iosfactory"
             ] as [String : Any]
         print(d)
         AlamofireHelper.post(url: GetWXOrderStr, parameters: d, successHandler: {[weak self](res)in

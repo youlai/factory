@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -66,12 +64,12 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xmN-jc-Gcu">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
                     <color key="backgroundColor" red="1" green="0.21673390570000001" blue="0.32569680839999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <viewLayoutGuide key="safeArea" id="RPQ-3Y-uQJ"/>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qYf-2d-mGb">
-                    <rect key="frame" x="0.0" y="44" width="414" height="50"/>
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AiD-Dz-uu4">
                             <rect key="frame" x="10" y="5" width="40" height="40"/>
@@ -539,7 +537,7 @@
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="brp-Mg-S8G">
                                                                     <rect key="frame" x="0.0" y="0.0" width="90" height="50"/>
                                                                     <subviews>
-                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_check_true" translatesAutoresizingMaskIntoConstraints="NO" id="Xtu-ZJ-eK2">
+                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="yuangou" translatesAutoresizingMaskIntoConstraints="NO" id="Xtu-ZJ-eK2">
                                                                             <rect key="frame" x="10" y="15" width="20" height="20"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="20" id="TqG-7Y-j92"/>
@@ -564,7 +562,7 @@
                                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dW0-l5-3yH">
                                                                     <rect key="frame" x="90" y="0.0" width="90" height="50"/>
                                                                     <subviews>
-                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_check_false" translatesAutoresizingMaskIntoConstraints="NO" id="KFt-N2-jnv">
+                                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" translatesAutoresizingMaskIntoConstraints="NO" id="KFt-N2-jnv">
                                                                             <rect key="frame" x="10" y="15" width="20" height="20"/>
                                                                             <constraints>
                                                                                 <constraint firstAttribute="height" constant="20" id="JwB-Hv-3Nh"/>
@@ -850,8 +848,6 @@
         <image name="address_icon" width="200" height="200"/>
         <image name="back" width="200" height="200"/>
         <image name="circle" width="200" height="200"/>
-        <image name="ic_check_false" width="39" height="39"/>
-        <image name="ic_check_true" width="39" height="39"/>
         <image name="icon_scan" width="64" height="64"/>
         <image name="plus" width="200" height="200"/>
         <image name="pull" width="11" height="10"/>

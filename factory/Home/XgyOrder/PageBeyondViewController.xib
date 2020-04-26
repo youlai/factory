@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PageBeyondViewController" customModule="ShopIOS" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PageBeyondViewController" customModule="factory" customModuleProvider="target">
             <connections>
                 <outlet property="btn_ok" destination="3MK-cS-Zc1" id="HIF-R0-TJz"/>
                 <outlet property="btn_reject" destination="GbL-zw-ZMP" id="OIz-j5-eoX"/>
@@ -29,7 +26,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ESO-Ay-6m3">
-                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                    <rect key="frame" x="0.0" y="150" width="414" height="746"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JGs-fj-l5r">
                             <rect key="frame" x="20" y="40" width="374" height="17"/>
@@ -38,10 +35,10 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="baq-E0-0Jm">
-                            <rect key="frame" x="20" y="77" width="374" height="671"/>
+                            <rect key="frame" x="20" y="77" width="374" height="599"/>
                         </imageView>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="IEZ-Zt-Ojj">
-                            <rect key="frame" x="20" y="768" width="374" height="50"/>
+                            <rect key="frame" x="20" y="696" width="374" height="50"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GbL-zw-ZMP">
                                     <rect key="frame" x="0.0" y="0.0" width="177" height="50"/>
@@ -65,7 +62,7 @@
                             </constraints>
                         </stackView>
                         <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dq2-pr-sUI">
-                            <rect key="frame" x="20" y="768" width="374" height="50"/>
+                            <rect key="frame" x="20" y="696" width="374" height="50"/>
                             <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="50" id="cBp-Ah-QoT"/>
@@ -94,7 +91,7 @@
                     </constraints>
                 </view>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="未申请远程费" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Occ-te-0V0">
-                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                    <rect key="frame" x="0.0" y="150" width="414" height="746"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
@@ -102,19 +99,19 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="ESO-Ay-6m3" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="7bE-J9-lH2"/>
-                <constraint firstItem="ESO-Ay-6m3" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="BBr-Fd-7jr"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Occ-te-0V0" secondAttribute="trailing" id="K9L-Br-MFL"/>
-                <constraint firstItem="Occ-te-0V0" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="LF9-MV-r7z"/>
-                <constraint firstItem="Occ-te-0V0" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="PEj-Jx-KPc"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="ESO-Ay-6m3" secondAttribute="bottom" id="Ul7-mi-GXi"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="Occ-te-0V0" secondAttribute="bottom" id="i8y-sl-OhK"/>
-                <constraint firstItem="ESO-Ay-6m3" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="za3-Cf-SXU"/>
+                <constraint firstItem="ESO-Ay-6m3" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="150" id="7bE-J9-lH2"/>
+                <constraint firstItem="ESO-Ay-6m3" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="BBr-Fd-7jr"/>
+                <constraint firstAttribute="trailing" secondItem="Occ-te-0V0" secondAttribute="trailing" id="K9L-Br-MFL"/>
+                <constraint firstItem="Occ-te-0V0" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="150" id="LF9-MV-r7z"/>
+                <constraint firstItem="Occ-te-0V0" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="PEj-Jx-KPc"/>
+                <constraint firstAttribute="bottom" secondItem="ESO-Ay-6m3" secondAttribute="bottom" id="Ul7-mi-GXi"/>
+                <constraint firstAttribute="bottom" secondItem="Occ-te-0V0" secondAttribute="bottom" id="i8y-sl-OhK"/>
+                <constraint firstItem="ESO-Ay-6m3" firstAttribute="trailing" secondItem="i5M-Pr-FkT" secondAttribute="trailing" id="za3-Cf-SXU"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="132" y="126"/>
         </view>
     </objects>
 </document>

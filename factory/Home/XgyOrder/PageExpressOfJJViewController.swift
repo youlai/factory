@@ -16,7 +16,7 @@ class PageExpressOfJJViewController: UITableViewController,EmptyViewProtocol {
     }
     func configEmptyView() -> UIView? {
         let view=Bundle.main.loadNibNamed("emptyView", owner: nil, options: nil)?[0]as?UIView
-        view?.height=screenH
+        view?.height=screenH-tabOffset
         view?.width=screenW
         return view
     }
@@ -37,6 +37,7 @@ class PageExpressOfJJViewController: UITableViewController,EmptyViewProtocol {
         tableView.separatorStyle = .none
         tableView.backgroundColor="#f2f2f2".color()
         tableView.register(UINib(nibName: "XgyOrderRecordTableViewCell", bundle: nil), forCellReuseIdentifier: "re")
+        tableView.contentInset=UIEdgeInsets(top: tabOffset-kStatusBarHeight, left: 0, bottom: 0, right: 0)
         getOrderDetail()
         // Do any additional setup after loading the view.
     }
@@ -56,11 +57,12 @@ class PageExpressOfJJViewController: UITableViewController,EmptyViewProtocol {
         }
     }
     func getExpressInfo(){
-        let d = ["ExpressNo":"75150832260164"]as[String:String]
+        let d = ["ExpressNo":ExpressNo]as[String:String]
+        print(d)
         AlamofireHelper.post(url: GetExpressInfo, parameters: d, successHandler: {[weak self](res)in
             HUD.dismiss()
             guard let ss = self else {return}
-            ss.dataSource=res["Data"]["Item2"].arrayValue.compactMap({ mLogistics(json: $0)})
+            ss.dataSource=res["Data"]["Item2"]["data"].arrayValue.compactMap({ mLogistics(json: $0)})
             ss.tableView.reloadData()
         }){[weak self] (error) in
             HUD.dismiss()

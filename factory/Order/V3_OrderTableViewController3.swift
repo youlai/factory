@@ -34,18 +34,11 @@ class V3_OrderTableViewController3: UIViewController,UITableViewDelegate,UITable
     var startDate:Date!
     
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var uv_search: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        uv_search.layer.cornerRadius=5
-        uv_search.addOnClickListener(target: self, action: #selector(search))
         tableView.register(UINib(nibName: "V3_OrderTableViewCell", bundle: nil), forCellReuseIdentifier: "re")
-        //        tableView.register(UINib(nibName: "OrderHeaderView", bundle: nil), forHeaderFooterViewReuseIdentifier: "header")
-        //        tableView.register(UINib(nibName: "OrderFooterView", bundle: nil), forHeaderFooterViewReuseIdentifier: "footer")
-        //        tableView.separatorStyle = .none
         tableView.separatorInset=UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        //        tableView.contentInset=UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         tableView.setEmtpyViewDelegate(target: self)
         tableView.backgroundColor = "#F0F0F0".color()
         tableView.separatorStyle = .none
@@ -56,8 +49,6 @@ class V3_OrderTableViewController3: UIViewController,UITableViewDelegate,UITable
             strongSelf.tableView.mj_footer.state = .idle
             strongSelf.tableView.mj_header.endRefreshing()
             strongSelf.loadData()
-            //MARK:发送通知
-            NotificationCenter.default.post(name: NSNotification.Name("工单数量"), object: self!.orderStatus)
         })
         
         tableView.mj_header = header;
@@ -80,17 +71,18 @@ class V3_OrderTableViewController3: UIViewController,UITableViewDelegate,UITable
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    //MARK:搜索
-    @objc func search(){
-//        self.navigationController?.pushViewController(SearchOrderTableViewController(), animated: true)
-    }
+//    "急需处理", "待完成", "星标工单"11, "已完成", "质保单"4, "退单处理","所有工单"5
+//    "远程费审核"9,"配件审核"1,"待寄件"10,"留言"15
+//    "30日内"16,"30日以上"17
+//    "待支付"2,"已支付"3
+//    "取消工单"13,"关闭工单"12
     @objc func loadData(){
         let d = ["UserID":UserID!,
                  "State":"\(orderStatus ?? 1)",
             "page":"\(pageNo)",
             "limit":"\(limit)"
         ] 
-        AlamofireHelper.post(url: NewWorkerGetOrderList, parameters: d, successHandler: {[weak self](res)in
+        AlamofireHelper.post(url: NewFactoryGetOrderList, parameters: d, successHandler: {[weak self](res)in
             HUD.dismiss()
             guard let ss = self else {return}
             
@@ -130,22 +122,64 @@ class V3_OrderTableViewController3: UIViewController,UITableViewDelegate,UITable
         let item=dataSouce[indexPath.row]
         cell.lb_time.text=Date.dateFormatterWithString(item.CreateDate!.replacingOccurrences(of: "T", with: " "))
         cell.lb_status.text="\(item.TypeName!)/\(item.GuaranteeStr!)"
-        cell.lb_distance.text="距离：\(item.Distance)km"
         cell.lb_content.text="\(item.ProductType!)"
+        cell.lb_orderid.text="工单号：\(item.OrderID)"
         if item.TypeID==1{
             cell.lb_memo.text="故障：\(item.Memo!)"
         }else{
             cell.lb_memo.text="备注：\(item.Memo!)"
         }
         cell.lb_addr.text="地址：\(item.Address ?? "")"
+        if item.FStarOrder == "Y"{
+            cell.iv_star.image=UIImage(named: "star_select")
+        }else{
+            cell.iv_star.image=UIImage(named: "star")
+        }
         cell.selectionStyle = .none
-        cell.btn_join.isHidden=true
         cell.lb_status.layer.cornerRadius=3
+        let tap1=UITapGestureRecognizer(target: self, action: #selector(copy_orderid(sender:)))
+        let tap2=UITapGestureRecognizer(target: self, action: #selector(stared(sender:)))
+        
+        cell.iv_copy.addGestureRecognizer(tap1)
+        cell.iv_star.addGestureRecognizer(tap2)
+        
+        tap1.view!.tag=indexPath.row
+        tap2.view!.tag=indexPath.row
         
         return cell
     }
+    //MARK:复制
+    @objc func copy_orderid(sender:UITapGestureRecognizer!){
+        let past = UIPasteboard.general
+        
+        past.string = "\(self.dataSouce[sender.view!.tag].OrderID)"
+        
+        HUD.showText(past.string!)
+    }
+    //MARK:星标
+    @objc func stared(sender:UITapGestureRecognizer!){
+        let order=self.dataSouce[sender.view!.tag]
+        var FStarOrder=order.FStarOrder
+        if FStarOrder == "Y"{
+            FStarOrder="N"
+        }else{
+            FStarOrder="Y"
+        }
+        let orderid = "\(order.OrderID)"
+            let d = ["OrderID":orderid,
+                     "FStarOrder":FStarOrder
+                ] as! [String : String]
+            AlamofireHelper.post(url: GetFStarOrder, parameters: d, successHandler: {[weak self](res)in
+                HUD.dismiss()
+                guard let ss = self else {return}
+                ss.loadData()
+            }){[weak self] (error) in
+                HUD.dismiss()
+                guard let ss = self else {return}
+            }
+    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        self.navigationController?.pushViewController(V3_OrderDetailViewController(orderid: "\(dataSouce[indexPath.row].OrderID)"), animated: true)
+        self.navigationController?.pushViewController(XgyOrderDetailViewController(OrderID: "\(dataSouce[indexPath.row].OrderID)"), animated: true)
     }
 }
 

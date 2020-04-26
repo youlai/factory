@@ -55,18 +55,17 @@ class PageDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.scrollview.contentInset=UIEdgeInsets(top: tabOffset, left: 0, bottom: 0, right: 0)
         btn_submit.layer.cornerRadius=5
         btn_apply.layer.cornerRadius=5
-        contentview.snp.remakeConstraints { (make) in
-            make.width.equalTo(screenW)
-        }
         btn_apply.addOnClickListener(target: self, action: #selector(apply))
-        btn_submit.addOnClickListener(target: self, action: #selector(evaluate))
+        btn_submit.addOnClickListener(target: self, action: #selector(ok))
         uv_service.addOnClickListener(target: self, action: #selector(call))
         btn_refresh.addOnClickListener(target: self, action: #selector(getOrderDetail))
         getOrderDetail()
         // Do any additional setup after loading the view.
     }
+    //MARK:是否发起质保
     @objc func apply(){
         //创建UIAlertController(警告窗口)
         let alert = UIAlertController(title: "提示", message: "是否发起质保", preferredStyle: .alert)
@@ -110,7 +109,7 @@ class PageDetailViewController: UIViewController {
         orderEvaluateView.srv_fwtd.delegate=self
         orderEvaluateView.btn_confirm.addOnClickListener(target: self, action: #selector(ok))
         orderEvaluateView.btn_cancel.addOnClickListener(target: self, action: #selector(ok))
-//        orderEvaluateView.tv
+        //        orderEvaluateView.tv
         popview.contenView = orderEvaluateView
         popview.anim = 3
         orderEvaluateView.snp.makeConstraints { (make) in
@@ -125,6 +124,7 @@ class PageDetailViewController: UIViewController {
     @objc func dismissview(){
         popview.dismissView()
     }
+    //MARK:是否拨打客服电话
     @objc func call(){
         //创建UIAlertController(警告窗口)
         let alert = UIAlertController(title: "提示", message: "是否拨打电话给客服", preferredStyle: .alert)
@@ -147,6 +147,7 @@ class PageDetailViewController: UIViewController {
         //以模态方式弹出
         self.present(alert, animated: true, completion: nil)
     }
+    //MARK:工单详情
     @objc func getOrderDetail(){
         let d = ["OrderID":OrderID]as[String:String]
         AlamofireHelper.post(url: GetOrderInfo, parameters: d, successHandler: {[weak self](res)in
@@ -189,7 +190,7 @@ class PageDetailViewController: UIViewController {
             ss.lb_type.text=detail.SubCategoryName
             ss.lb_memo.text=detail.Memo
             ss.lb_ordermoney.text="￥\(detail.OrderMoney)"
-            
+            //MARK:是否确认完结工单
             if (detail.StateStr=="服务完成") {
                 if (detail.IsReturn=="1") {
                     if (detail.ReturnAccessoryMsg=="" || detail.ReturnAccessoryMsg == nil) {
@@ -203,6 +204,7 @@ class PageDetailViewController: UIViewController {
             } else {
                 ss.btn_submit.isHidden=true
             }
+            //MARK:是否发起质保
             if (detail.StateStr=="已完成") {
                 ss.btn_apply.isHidden=false
             } else {
@@ -215,17 +217,17 @@ class PageDetailViewController: UIViewController {
         }
     }
     
-
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destination.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }
 extension PageDetailViewController:JNStarReteViewDelegate,popPayDelegate{
     
@@ -288,11 +290,11 @@ extension PageDetailViewController:JNStarReteViewDelegate,popPayDelegate{
         }
     }
     @objc func ok(){
-        appraise=orderEvaluateView.tv_content.text
-        if appraise.isEmpty{
-            HUD.showText("请输入评价")
-            return
-        }
+        //        appraise=orderEvaluateView.tv_content.text
+        //        if appraise.isEmpty{
+        //            HUD.showText("请输入评价")
+        //            return
+        //        }
         popPayView = popPayPwdView()
         popPayView.setMoney(money: "￥10")
         popPayView!.delegate = self
@@ -303,7 +305,7 @@ extension PageDetailViewController:JNStarReteViewDelegate,popPayDelegate{
     }
     
     func compareCode(view:popPayPwdView,payCode: String) {
-        enSureOrder(PayPassword: payCode)
+        nowPayEnSureOrder(PayPassword: payCode)
     }
     func enSureOrder(PayPassword:String){
         let d = ["OrderID":OrderID,
@@ -323,6 +325,30 @@ extension PageDetailViewController:JNStarReteViewDelegate,popPayDelegate{
                 ss.getOrderDetail()
             }else{
                 HUD.showText(res["Data"]["Item2"].stringValue)
+            }
+        }){[weak self] (error) in
+            HUD.dismiss()
+            guard let ss = self else {return}
+        }
+    }
+    //MARK:确认完结工单，结算金额
+    func nowPayEnSureOrder(PayPassword:String){
+        let d = ["OrderID":OrderID,
+                 "PayPassword":PayPassword]as[String:String]
+        AlamofireHelper.post(url: NowPayEnSureOrder, parameters: d, successHandler: {[weak self](res)in
+            HUD.dismiss()
+            guard let ss = self else {return}
+            if res["Data"]["Item1"].boolValue{
+                HUD.showText("已成功完结工单")
+                ss.popPayView.dismiss()
+                ss.getOrderDetail()
+            }else{
+                HUD.showText(res["Data"]["Item2"].stringValue)
+                ss.popPayView.dot_hidden()
+                if res["Data"]["Item2"].stringValue=="请设置支付密码"{
+                    ss.popPayView.dismiss()
+                    ss.navigationController?.pushViewController(ChangePayPwdViewController(), animated: true)
+                }
             }
         }){[weak self] (error) in
             HUD.dismiss()

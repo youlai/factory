@@ -8,13 +8,13 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UIWebViewViewController" customModule="MasterWorker" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UIWebViewViewController" customModule="factory" customModuleProvider="target">
             <connections>
                 <outlet property="lb_title" destination="h4m-Ap-FR9" id="GLo-dd-GCk"/>
                 <outlet property="uv_back" destination="sn3-U1-nyp" id="Mdb-B7-tkd"/>
                 <outlet property="uv_close" destination="lsg-CX-gtq" id="Hen-8W-kgf"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
-                <outlet property="webview" destination="Szo-f5-Pvg" id="hiw-PR-pyW"/>
+                <outlet property="webview" destination="CUp-OP-Bgf" id="mhY-ta-2HC"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -88,23 +88,28 @@
                     </constraints>
                     <viewLayoutGuide key="safeArea" id="VVb-ju-As6"/>
                 </view>
-                <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Szo-f5-Pvg">
+                <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CUp-OP-Bgf">
                     <rect key="frame" x="0.0" y="104" width="414" height="758"/>
-                </webView>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <wkWebViewConfiguration key="configuration">
+                        <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                        <wkPreferences key="preferences"/>
+                    </wkWebViewConfiguration>
+                </wkWebView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="Szo-f5-Pvg" secondAttribute="bottom" id="0o3-aE-qAn"/>
+                <constraint firstItem="CUp-OP-Bgf" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="EYi-s2-ANs"/>
                 <constraint firstItem="5iU-0G-Tqf" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Fwp-bL-Jbf"/>
+                <constraint firstItem="CUp-OP-Bgf" firstAttribute="top" secondItem="f7e-tf-Idu" secondAttribute="bottom" id="GYz-rj-rXz"/>
                 <constraint firstItem="5iU-0G-Tqf" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="LpW-Tq-zFL"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Szo-f5-Pvg" secondAttribute="trailing" id="O3K-of-xdL"/>
-                <constraint firstItem="Szo-f5-Pvg" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="fqO-Xw-PjR"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="CUp-OP-Bgf" secondAttribute="trailing" id="XvW-a0-6ZH"/>
                 <constraint firstItem="f7e-tf-Idu" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="gWG-bY-cAB"/>
                 <constraint firstItem="f7e-tf-Idu" firstAttribute="top" secondItem="5iU-0G-Tqf" secondAttribute="bottom" id="hbH-qS-JqZ"/>
                 <constraint firstAttribute="trailing" secondItem="5iU-0G-Tqf" secondAttribute="trailing" id="moE-5N-lwb"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="CUp-OP-Bgf" secondAttribute="bottom" id="pBb-vs-aWa"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="top" secondItem="5iU-0G-Tqf" secondAttribute="bottom" id="pC0-Hf-itR"/>
                 <constraint firstItem="f7e-tf-Idu" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="vda-iN-Sjw"/>
-                <constraint firstItem="Szo-f5-Pvg" firstAttribute="top" secondItem="f7e-tf-Idu" secondAttribute="bottom" id="xw0-WI-OGQ"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <point key="canvasLocation" x="132" y="94"/>
@@ -112,6 +117,6 @@
     </objects>
     <resources>
         <image name="clear" width="32" height="32"/>
-        <image name="left_arrow" width="29.333333969116211" height="54.666667938232422"/>
+        <image name="left_arrow" width="88" height="164"/>
     </resources>
 </document>

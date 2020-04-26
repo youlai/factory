@@ -16,6 +16,8 @@ class ChangePayPwdViewController: UIViewController {
     @IBOutlet weak var btn_submit: UIButton!
     @IBOutlet weak var lb_title: UILabel!
     
+    @IBOutlet weak var uv_old: UIView!
+    
     var userOfxgy:UserOfxgy!
     var old:String!
     var pwd:String!
@@ -51,11 +53,11 @@ class ChangePayPwdViewController: UIViewController {
             ss.userOfxgy=res["Data"]["data"].arrayValue.compactMap({ UserOfxgy(json: $0)})[0]
             if ss.userOfxgy.PayPassWord != ""{
                 ss.lb_title.text="修改支付密码"
-                ss.tf_old.isHidden=false
+                ss.uv_old.isHidden=false
                 ss.type=1
             }else{
                 ss.lb_title.text="设置支付密码"
-                ss.tf_old.isHidden=true
+                ss.uv_old.isHidden=true
                 ss.type=2
             }
         }){[weak self] (error) in
@@ -99,7 +101,7 @@ class ChangePayPwdViewController: UIViewController {
             HUD.dismiss()
             guard let ss = self else {return}
             if res["Data"]["Item2"] != "旧密码错误"{
-                HUD.showText("修改成功")
+                HUD.showText(res["Data"]["Item2"].stringValue)
                 ss.navigationController?.popViewController(animated: true)
             }else{
                 HUD.showText(res["Data"]["Item2"].stringValue)

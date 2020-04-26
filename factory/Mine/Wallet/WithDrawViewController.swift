@@ -15,7 +15,6 @@ class WithDrawViewController: UIViewController {
     @IBOutlet weak var lb_choose: UILabel!
     @IBOutlet weak var lb_bankname: UILabel!
     @IBOutlet weak var lb_cardno: UILabel!
-    @IBOutlet weak var lb_balance: UILabel!
     @IBOutlet weak var uv_choose: UIView!
     @IBOutlet weak var uv_card: UIView!
     @IBOutlet weak var iv_bankicon: UIImageView!
@@ -23,15 +22,7 @@ class WithDrawViewController: UIViewController {
     @IBOutlet weak var btn_withdraw: UIButton!
     var money:String! //金额
     var CardNo="" //卡号
-    var balance:Float //卡号
-    init(balance:Float){
-        self.balance=balance
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    var userOfxgy:UserOfxgy!
     override func viewDidLayoutSubviews() {
         let gradientLayer = CAGradientLayer().rainbowLayer()
         gradientLayer.frame = btn_withdraw.bounds
@@ -40,12 +31,31 @@ class WithDrawViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.lb_balance.text="可用余额￥\(balance)"
         btn_withdraw.layer.cornerRadius=5
         uv_back.addOnClickListener(target: self, action: #selector(back))
-        btn_withdraw.addOnClickListener(target: self, action: #selector(getIDCardImg))
+        btn_withdraw.addOnClickListener(target: self, action: #selector(withDraw))
         uv_choose.addOnClickListener(target: self, action: #selector(choosecard))
         NotificationCenter.default.addObserver(self, selector: #selector(update), name: NSNotification.Name("choosecard"), object: nil)
+        getUserInfoList()
+    }
+    //MARK:
+    @objc func getUserInfoList(){
+        let d = ["UserID":UserID,
+                 "limit":"1"
+            ] as! [String : String]
+        AlamofireHelper.post(url: GetUserInfoList, parameters: d, successHandler: {[weak self](res)in
+            HUD.dismiss()
+            guard let ss = self else {return}
+            if res["Info"] == "HTTP请求不合法，请求有可能被篡改"{
+                return
+            }
+            ss.userOfxgy=res["Data"]["data"].arrayValue.compactMap({ UserOfxgy(json: $0)})[0]
+            ss.money="\(ss.userOfxgy.DepositMoney)"
+            ss.tf_money.text="\(ss.userOfxgy.DepositMoney)"
+        }){[weak self] (error) in
+            HUD.dismiss()
+            guard let ss = self else {return}
+        }
     }
     @objc func back(){
         self.navigationController?.popViewController(animated: true)
@@ -107,13 +117,12 @@ class WithDrawViewController: UIViewController {
     }
     
     @objc func withDraw(){
-        money=tf_money.text
-        if money.isEmpty{
-            HUD.showText("请输入提现金额")
-            return
-        }
         if CardNo.isEmpty{
             HUD.showText("请选择银行卡")
+            return
+        }
+        if money=="0.0"{
+            HUD.showText("无保证金可提现")
             return
         }
         let d = ["UserID":UserID!,
@@ -121,7 +130,7 @@ class WithDrawViewController: UIViewController {
                  "CardNo":CardNo
             ] as [String : Any]
         print(d)
-        AlamofireHelper.post(url: WithDraw, parameters: d, successHandler: {[weak self](res)in
+        AlamofireHelper.post(url: WithDrawDeposit, parameters: d, successHandler: {[weak self](res)in
             HUD.dismiss()
             guard let ss = self else {return}
             if res["Data"]["Item1"].boolValue{
@@ -132,33 +141,5 @@ class WithDrawViewController: UIViewController {
             HUD.dismiss()
             guard let ss = self else {return}
         }
-    }
-    //MARK:获取身份证照片
-    @objc func getIDCardImg(){
-        let d = ["UserID":UserID
-            ] as! [String : String]
-        AlamofireHelper.post(url: GetIDCardImg, parameters: d, successHandler: {[weak self](res)in
-            HUD.dismiss()
-            guard let ss = self else {return}
-            if res["Data"].arrayValue.count != 3{
-                ss.unComplete()
-            }else{
-                ss.withDraw()
-            }
-        }){[weak self] (error) in
-            HUD.dismiss()
-            guard let ss = self else {return}
-        }
-    }
-    //MARK:实名信息不完善
-    @objc func unComplete(){
-        let alertVC : UIAlertController = UIAlertController.init(title: "提示", message: "您实名信息不完善，不能提现，是否去完善并提现", preferredStyle: .alert)
-        let falseAA : UIAlertAction = UIAlertAction.init(title: "否", style: .cancel, handler: nil)
-        let trueAA : UIAlertAction = UIAlertAction.init(title: "是", style: .default) { (alertAction) in
-//            self.navigationController?.pushViewController(CompleteCertificationViewController(), animated: true)
-        }
-        alertVC.addAction(falseAA)
-        alertVC.addAction(trueAA)
-        self.present(alertVC, animated: true, completion: nil)
     }
 }

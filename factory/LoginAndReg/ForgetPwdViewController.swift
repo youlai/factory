@@ -97,7 +97,7 @@ class ForgetPwdViewController: UIViewController {
         let d = [
             "mobile":name,
             "type":"2",
-            "roleType":"worker"
+            "roleType":"factory"
             ] as [String : String]
         AlamofireHelper.post(url: GetCode, parameters: d, successHandler: {[weak self](res)in
             HUD.dismiss()
@@ -142,7 +142,7 @@ class ForgetPwdViewController: UIViewController {
                  "type":"2",
                  "password":pwd,
                  "code":code,
-                 "roleType":"worker"
+                 "roleType":"factory"
             ] as [String : String]
         AlamofireHelper.post(url: ForgetPassword, parameters: d, successHandler: {[weak self](res)in
             HUD.dismiss()

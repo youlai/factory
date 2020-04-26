@@ -96,7 +96,7 @@ class CodeLoginViewController: UIViewController {
         let d = [
             "mobile":name,
             "type":"3",
-            "roleType":"worker"
+            "roleType":"factory"
             ] as [String : String]
         AlamofireHelper.post(url: GetCode, parameters: d, successHandler: {[weak self](res)in
             HUD.dismiss()

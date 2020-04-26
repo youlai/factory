@@ -74,16 +74,16 @@ class RegisterViewController: UIViewController {
     //MARK:选中用户协议
     @objc func check(){
         if flag==0{
-            iv_check.image=UIImage(named: "pay_uncheck")
+            iv_check.image=UIImage(named: "circle")
             flag=1
         }else{
-            iv_check.image=UIImage(named: "pay_checked")
+            iv_check.image=UIImage(named: "yuangou")
             flag=0
         }
     }
     //MARK:用户协议
     @objc func agreement(){
-        self.navigationController?.pushViewController(UIWebViewViewController(headtitle: "用户协议", url: "https://admin.xigyu.com/Agreement",type:0), animated: true)
+        self.navigationController?.pushViewController(UIWebViewViewController(headtitle: "用户协议", url: "https://admin.xigyu.com/message/FactoryAgreement",type:0), animated: true)
     }
     @objc func getcode(){
         name=tf_name.text!
@@ -113,7 +113,7 @@ class RegisterViewController: UIViewController {
         let d = [
             "mobile":name,
             "type":"1",
-            "roleType":"worker"
+            "roleType":"factory"
             ] as [String : String]
         AlamofireHelper.post(url: GetCode, parameters: d, successHandler: {[weak self](res)in
             HUD.dismiss()
@@ -153,7 +153,7 @@ class RegisterViewController: UIViewController {
                  "type":"1",
                  "password":pwd,
                  "code":code,
-                 "roleType":"worker"
+                 "roleType":"factory"
             ] as [String : String]
         AlamofireHelper.post(url: Reg, parameters: d, successHandler: {[weak self](res)in
             HUD.dismiss()

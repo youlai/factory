@@ -28,6 +28,7 @@ class V3_HomeViewController: UIViewController,YLSinglerViewDelegate{
     var userOfxgy:UserOfxgy!
     var popview:ZXPopView!
     var authenticationView:AuthenticationView!
+    @IBOutlet weak var usv: UIScrollView!
     @IBOutlet weak var uv_msg: UIView!
     @IBOutlet weak var uv_bar: UIView!
     @IBOutlet weak var uv_news: UIView!
@@ -45,34 +46,77 @@ class V3_HomeViewController: UIViewController,YLSinglerViewDelegate{
     @IBOutlet weak var uv_in_three: UIView!
     @IBOutlet weak var uv_in_four: UIView!
     
-    @IBOutlet weak var uv_djgd: UIView!
-    @IBOutlet weak var uv_yjgd: UIView!
+    @IBOutlet weak var uv_sygd: UIView!
+    @IBOutlet weak var uv_jxgd: UIView!
+    @IBOutlet weak var uv_dwcgd: UIView!
     @IBOutlet weak var uv_xbgd: UIView!
-    @IBOutlet weak var uv_dfj: UIView!
-    @IBOutlet weak var uv_zbgd: UIView!
-    @IBOutlet weak var uv_ytgd: UIView!
-    @IBOutlet weak var uv_gbgd: UIView!
     @IBOutlet weak var uv_ywc: UIView!
+    @IBOutlet weak var uv_zbgd: UIView!
+    @IBOutlet weak var uv_tdgd: UIView!
     
-    @IBOutlet weak var lb_djgd: UILabel!
-    @IBOutlet weak var lb_yjgd: UILabel!
+    @IBOutlet weak var uv_dsh: UIView!
+    @IBOutlet weak var uv_djj: UIView!
+    @IBOutlet weak var uv_dzf: UIView!
+    @IBOutlet weak var uv_ywc1: UIView!
+    
+    @IBOutlet weak var lb_sygd: UILabel!
+    @IBOutlet weak var lb_jxgd: UILabel!
+    @IBOutlet weak var lb_dwcgd: UILabel!
     @IBOutlet weak var lb_xbgd: UILabel!
-    @IBOutlet weak var lb_dfj: UILabel!
-    @IBOutlet weak var lb_zbgd: UILabel!
-    @IBOutlet weak var lb_ytgd: UILabel!
-    @IBOutlet weak var lb_gbgd: UILabel!
     @IBOutlet weak var lb_ywc: UILabel!
+    @IBOutlet weak var lb_zbgd: UILabel!
+    @IBOutlet weak var lb_tdgd: UILabel!
+    
+    @IBOutlet weak var lb_dsh: UILabel!
+    @IBOutlet weak var lb_djj: UILabel!
+    @IBOutlet weak var lb_dzf: UILabel!
+    @IBOutlet weak var lb_ywc1: UILabel!
+    
+    @IBOutlet weak var iv_avator: UIImageView!
+    @IBOutlet weak var lb_phone: UILabel!
+    @IBOutlet weak var lb_name: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        iv_avator.layer.cornerRadius=20
         messgIsOrNo()
         getUserInfoList()
+        factoryNavigationBarNumber()
         getListCategoryContentByCategoryID()
+        
+        //refresh
+        let header = TTRefreshHeader.init(refreshingBlock: {[weak self] in
+            guard let strongSelf = self else{return}
+            strongSelf.messgIsOrNo()
+            strongSelf.getUserInfoList()
+            strongSelf.factoryNavigationBarNumber()
+            strongSelf.getListCategoryContentByCategoryID()
+            strongSelf.usv.mj_header.endRefreshing()
+        })
+        usv.mj_header = header
+        
+        //MARK:待审核，待寄件，待支付，已完成
+        uv_dsh.addOnClickListener(target: self, action: #selector(toDsh))
+        uv_djj.addOnClickListener(target: self, action: #selector(toDjj))
+        uv_dzf.addOnClickListener(target: self, action: #selector(toDzf))
+        uv_ywc1.addOnClickListener(target: self, action: #selector(toYwc))
+        //MARK:所有工单，急需处理，待完成，星标工单，已完成，质保单，退单处理
+        uv_sygd.addOnClickListener(target: self, action: #selector(toSygd))
+        uv_jxgd.addOnClickListener(target: self, action: #selector(toJxcl))
+        uv_dwcgd.addOnClickListener(target: self, action: #selector(toDwc))
+        uv_xbgd.addOnClickListener(target: self, action: #selector(toXbgd))
+        uv_ywc.addOnClickListener(target: self, action: #selector(toYwc))
+        uv_zbgd.addOnClickListener(target: self, action: #selector(toZbd))
+        uv_tdgd.addOnClickListener(target: self, action: #selector(toTdcl))
+        //MARK:消息
         uv_msg.addOnClickListener(target: self, action: #selector(msg))
+        //MARK:发布安装，发布维修，发布送修，批量发单
         uv_one.addOnClickListener(target: self, action: #selector(toInstallSendOrder))
         uv_two.addOnClickListener(target: self, action: #selector(toRepairSendOrder))
         uv_three.addOnClickListener(target: self, action: #selector(toInstallSendOrder))
         uv_four.addOnClickListener(target: self, action: #selector(toInstallSendOrder))
-        uv_bar.border(color: .red, width: 1, type: UIBorderSideType.UIBorderSideTypeAll, cornerRadius: 7)
+        
+        uv_bar.border(color: .red, width: 0.5, type: UIBorderSideType.UIBorderSideTypeAll, cornerRadius: 7)
         uv_infoview.border(color: .lightGray, width: 0.2, type: UIBorderSideType.UIBorderSideTypeAll, cornerRadius: 7)
         shadow(view: uv_one)
         shadow(view: uv_two)
@@ -96,13 +140,83 @@ class V3_HomeViewController: UIViewController,YLSinglerViewDelegate{
         //MARK:接收通知
         NotificationCenter.default.addObserver(self, selector: #selector(reloadUserinfo(noti:)), name: NSNotification.Name("更新用户信息"), object: nil)
     }
+    //MARK:去待审核
+    @objc func toDsh(){
+        self.tabBarController?.selectedIndex=1
+        //MARK:发送通知
+        NotificationCenter.default.post(name: NSNotification.Name("待审核"), object: nil)
+    }
+    //MARK:去待寄件
+    @objc func toDjj(){
+        self.tabBarController?.selectedIndex=1
+        //MARK:发送通知
+        NotificationCenter.default.post(name: NSNotification.Name("待寄件"), object: nil)
+    }
+    //MARK:去待支付
+    @objc func toDzf(){
+        self.tabBarController?.selectedIndex=1
+        //MARK:发送通知
+        NotificationCenter.default.post(name: NSNotification.Name("待支付"), object: nil)
+    }
+    //MARK:去已完成
+    @objc func toYwc(){
+        self.tabBarController?.selectedIndex=1
+        //MARK:发送通知
+        NotificationCenter.default.post(name: NSNotification.Name("已完成"), object: nil)
+    }
+    //MARK:去所有工单
+    @objc func toSygd(){
+        self.tabBarController?.selectedIndex=1
+        //MARK:发送通知
+        NotificationCenter.default.post(name: NSNotification.Name("所有工单"), object: nil)
+    }
+    //MARK:去急需处理
+    @objc func toJxcl(){
+        self.tabBarController?.selectedIndex=1
+        //MARK:发送通知
+        NotificationCenter.default.post(name: NSNotification.Name("急需处理"), object: nil)
+    }
+    //MARK:去待完成
+    @objc func toDwc(){
+        self.tabBarController?.selectedIndex=1
+        //MARK:发送通知
+        NotificationCenter.default.post(name: NSNotification.Name("待完成"), object: nil)
+    }
+    //MARK:去星标工单
+    @objc func toXbgd(){
+        self.tabBarController?.selectedIndex=1
+        //MARK:发送通知
+        NotificationCenter.default.post(name: NSNotification.Name("星标工单"), object: nil)
+    }
+    //MARK:去质保单
+    @objc func toZbd(){
+        self.tabBarController?.selectedIndex=1
+        //MARK:发送通知
+        NotificationCenter.default.post(name: NSNotification.Name("质保单"), object: nil)
+    }
+    //MARK:去退单处理
+    @objc func toTdcl(){
+        self.tabBarController?.selectedIndex=1
+        //MARK:发送通知
+        NotificationCenter.default.post(name: NSNotification.Name("退单处理"), object: nil)
+    }
     //MARK:去发安装
-        @objc func toInstallSendOrder(){
-            self.tabBarController?.navigationController!.pushViewController(Install_SendOrderViewController(), animated: true)
+    @objc func toInstallSendOrder(){
+        if userOfxgy != nil{
+            if userOfxgy.IfAuth=="1"{//账号已实名可以发单
+                self.tabBarController?.navigationController!.pushViewController(Install_SendOrderViewController(), animated: true)
+            }else{
+                showpop()
+            }
         }
+    }
     //MARK:去发维修
     @objc func toRepairSendOrder(){
-        self.tabBarController?.navigationController!.pushViewController(Repair_SendOrderViewController(), animated: true)
+        if userOfxgy.IfAuth=="1"{//账号已实名可以发单
+            self.tabBarController?.navigationController!.pushViewController(Repair_SendOrderViewController(), animated: true)
+        }else{
+            showpop()
+        }
     }
     //MARK:阴影圆角
     @objc func shadow(view:UIView){
@@ -132,13 +246,13 @@ class V3_HomeViewController: UIViewController,YLSinglerViewDelegate{
     }
     //MARK:消息
     @objc func msg(){
-//        self.tabBarController?.navigationController?.pushViewController(V3_MsgViewController(), animated: true)
+        self.tabBarController?.navigationController?.pushViewController(V3_MsgViewController(), animated: true)
     }
     //MARK:实名弹框
     @objc func showpop(){
         popview = ZXPopView.init(frame: CGRect(x: 0, y: 0, width: screenW, height: screenH))
         authenticationView=Bundle.main.loadNibNamed("AuthenticationView", owner: nil, options: nil)?[0] as? AuthenticationView
-
+        
         authenticationView.btn_toauth.addOnClickListener(target: self, action: #selector(tocertification))
         authenticationView.btn_cancel.addOnClickListener(target: self, action: #selector(dismisspopview))
         authenticationView.clipsToBounds=true
@@ -148,7 +262,7 @@ class V3_HomeViewController: UIViewController,YLSinglerViewDelegate{
         popview.contenView=authenticationView
         if userOfxgy != nil{
             if userOfxgy.IfAuth!.isEmpty{
-                authenticationView.lb_content.text="您暂时未实名认证，无法进行接单,赶紧去认证吧。"
+                authenticationView.lb_content.text="您暂时未实名认证，无法进行发单,赶紧去认证吧。"
                 authenticationView.btn_toauth.setTitle("去实名", for: .normal)
                 authenticationView.btn_cancel.setTitle("下次再说", for: .normal)
                 authenticationView.btn_toauth.isHidden=false
@@ -164,7 +278,7 @@ class V3_HomeViewController: UIViewController,YLSinglerViewDelegate{
                 authenticationView.btn_cancel.setTitle("下次再说", for: .normal)
                 authenticationView.btn_toauth.isHidden=false
             }else{
-                authenticationView.lb_content.text="您暂时未实名认证，无法进行接单,赶紧去认证吧。"
+                authenticationView.lb_content.text="您暂时未实名认证，无法进行发单,赶紧去认证吧。"
                 authenticationView.btn_toauth.setTitle("去实名", for: .normal)
                 authenticationView.btn_cancel.setTitle("下次再说", for: .normal)
                 authenticationView.btn_toauth.isHidden=false
@@ -182,11 +296,49 @@ class V3_HomeViewController: UIViewController,YLSinglerViewDelegate{
     }
     //MARK:去实名
     @objc func tocertification(){
-//        self.tabBarController?.navigationController!.pushViewController(V3_CertificationViewController(), animated: true)
+        self.tabBarController?.navigationController!.pushViewController(CertificationViewController(), animated: true)
         dismisspopview()
     }
     @objc func dismisspopview(){
         popview.dismissView()
+    }
+    /**
+     * 各工单数量
+     * var Count1 = 0;//所有工单数量
+     * var Count2 = 0;//急需处理数量
+     * var Count3 = 0;//待完成数量
+     * var Count4 = 0;//已完成数量
+     * var Count5 = 0;//质保单数量
+     * var Count6 = 0;//退单处理数量
+     * var Count7 = 0;//星标工单数量
+     * var Count8 = 0;//待审核数量
+     * var Count9 = 0;//待寄件数量
+     * var Count10 = 0;//待支付数量
+     * var Count11= 0;//已完成数量
+     * */
+    @objc func factoryNavigationBarNumber(){
+        let d = ["UserID":UserID,
+                 "page":"1",
+                 "limit":"10"
+            ] as! [String : String]
+        AlamofireHelper.post(url: FactoryNavigationBarNumber, parameters: d, successHandler: {[weak self](res)in
+            HUD.dismiss()
+            guard let ss = self else {return}
+            ss.lb_sygd.text="(\(res["Data"]["Item2"]["Count1"]))"
+            ss.lb_jxgd.text="(\(res["Data"]["Item2"]["Count2"]))"
+            ss.lb_dwcgd.text="(\(res["Data"]["Item2"]["Count3"]))"
+            ss.lb_ywc.text="(\(res["Data"]["Item2"]["Count4"]))"
+            ss.lb_zbgd.text="(\(res["Data"]["Item2"]["Count5"]))"
+            ss.lb_tdgd.text="(\(res["Data"]["Item2"]["Count6"]))"
+            ss.lb_xbgd.text="(\(res["Data"]["Item2"]["Count7"]))"
+            ss.lb_dsh.text="(\(res["Data"]["Item2"]["Count8"]))"
+            ss.lb_djj.text="(\(res["Data"]["Item2"]["Count9"]))"
+            ss.lb_dzf.text="(\(res["Data"]["Item2"]["Count10"]))"
+            ss.lb_ywc1.text="(\(res["Data"]["Item2"]["Count11"]))"
+        }){[weak self] (error) in
+            HUD.dismiss()
+            guard let ss = self else {return}
+        }
     }
     //MARK:获取个人信息
     @objc func getUserInfoList(){
@@ -205,6 +357,28 @@ class V3_HomeViewController: UIViewController,YLSinglerViewDelegate{
                     ss.showpop()
                 }
             }
+            if ss.userOfxgy.Avator != nil{
+                ss.iv_avator.setImage(path: URL.init(string: "https://img.xigyu.com/Pics/Avator/\(ss.userOfxgy.Avator!)")!)
+            }
+            ss.getmessageBytype()
+            ss.lb_phone.text = "\(ss.userOfxgy.UserID!.prefix(3))****\(ss.userOfxgy.UserID!.suffix(4))"
+        }){[weak self] (error) in
+            HUD.dismiss()
+            guard let ss = self else {return}
+        }
+    }
+    //MARK:获取公司信息
+    @objc func getmessageBytype(){
+        let d = ["UserID":UserID
+            ] as! [String : String]
+        AlamofireHelper.post(url: GetmessageBytype, parameters: d, successHandler: {[weak self](res)in
+            HUD.dismiss()
+            guard let ss = self else {return}
+            if res["Data"]["Item1"].boolValue{
+                ss.lb_name.text=res["Data"]["Item2"]["CompanyName"].stringValue
+            }else{
+               ss.lb_name.text="未认证"
+            }
         }){[weak self] (error) in
             HUD.dismiss()
             guard let ss = self else {return}
@@ -212,7 +386,7 @@ class V3_HomeViewController: UIViewController,YLSinglerViewDelegate{
     }
     //MARK:系统消息
     @objc func getListCategoryContentByCategoryID(){
-        let d = ["CategoryID":"7",
+        let d = ["CategoryID":"3",
                  "limit":"5",
                  "page":"1"
         ]
@@ -241,7 +415,7 @@ class V3_HomeViewController: UIViewController,YLSinglerViewDelegate{
     @objc func messgIsOrNo(){
         let d = ["UserID":UserID,
                  "limit":"1",
-            "page":"1"
+                 "page":"1"
             ] as! [String : String]
         AlamofireHelper.post(url: MessgIsOrNo, parameters: d, successHandler: {[weak self](res)in
             HUD.dismiss()
@@ -376,38 +550,5 @@ struct UserOfxgy {
         LastLoginDate = json["LastLoginDate"].stringValue
         StartDate = json["StartDate"].stringValue
         IfAuth = json["IfAuth"].stringValue
-    }
-}
-struct mSystemMsg {
-    var Content: String?
-    var Id: Int = 0
-    var Title: String?
-    var limit: Int = 0
-    var CategoryID: Int = 0
-    var Author: String?
-    var CategoryContentID: Int = 0
-    var IsUse: String?
-    var page: Int = 0
-    var ParentCategoryID: Int = 0
-    var CreateTime: String?
-    var Url: String?
-    var Version: Int = 0
-    var Source: String?
-    
-    init(json: JSON) {
-        Content = json["Content"].stringValue
-        Id = json["Id"].intValue
-        Title = json["Title"].stringValue
-        limit = json["limit"].intValue
-        CategoryID = json["CategoryID"].intValue
-        Author = json["Author"].stringValue
-        CategoryContentID = json["CategoryContentID"].intValue
-        IsUse = json["IsUse"].stringValue
-        page = json["page"].intValue
-        ParentCategoryID = json["ParentCategoryID"].intValue
-        CreateTime = json["CreateTime"].stringValue
-        Url = json["Url"].stringValue
-        Version = json["Version"].intValue
-        Source = json["Source"].stringValue
     }
 }

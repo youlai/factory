@@ -48,7 +48,7 @@ class AboutUsViewController: UIViewController {
     }
     //MARK:用户协议
     @objc func agreement(){
-        self.navigationController?.pushViewController(UIWebViewViewController(headtitle: "用户协议", url: "https://admin.xigyu.com/Agreement",type:0), animated: true)
+        self.navigationController?.pushViewController(UIWebViewViewController(headtitle: "用户协议", url: "https://admin.xigyu.com/message/FactoryAgreement",type:0), animated: true)
     }
     //MARK:意见反馈
     @objc func feedback(){

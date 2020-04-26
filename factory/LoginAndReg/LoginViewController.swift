@@ -66,7 +66,7 @@ class LoginViewController: UIViewController {
         let resp=noti.object as! SendAuthResp
         if resp.errCode==0{
             //登录成功回调
-            AlamofireHelper.post(url: "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx56e7e094b3185f2f&secret=b700d35cf2899d67010d7c706d3e3f9f&code=\(resp.code!)&grant_type=authorization_code", parameters: nil, successHandler: {[weak self](res)in
+            AlamofireHelper.post(url: "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wxbaf9ee1d21a481af&secret=13f6d3f2006611c3cfc61ecc0f681d91&code=\(resp.code!)&grant_type=authorization_code", parameters: nil, successHandler: {[weak self](res)in
                 HUD.dismiss()
                 guard let ss = self else {return}
                 let wx_token=Wx_access_token.init(json: res)

@@ -38,8 +38,25 @@ class XgyOrderDetailViewController: TabmanViewController,PageboyViewControllerDa
     }
     var vcs:[UIViewController]! = []
     var OrderID:String!
-    let titles = ["详情","审核配件","审核远程费","工单跟踪","寄件物流","返件物流"]
+    var bg:UIView!
+    let titles = ["详情","审核配件","审核远程费","留言","工单跟踪","寄件物流","返件物流"]
+    override func viewDidLayoutSubviews() {
+        tabOffset=bg.y+bg.height
+        print(tabOffset)
+        if vcs.count != 7 {
+            vcs.append(PageDetailViewController(OrderID: OrderID))
+            vcs.append(PageAccessoryViewController(OrderID: OrderID))
+            vcs.append(PageBeyondViewController(OrderID: OrderID))
+            vcs.append(LeaveMsgViewController(orderid: OrderID))
+            vcs.append(PageOrderRecordViewController(OrderID: OrderID))
+            vcs.append(PageExpressOfJJViewController(OrderID: OrderID))
+            vcs.append(PageExpressOfFJViewController(OrderID: OrderID))
+            self.dataSource = self
+        }
+        
+    }
     override func viewDidLoad() {
+        self.automaticallyAdjustsChildInsets = false
         super.viewDidLoad()
         let bar=UIView(frame: CGRect(x: 0, y: 0, width: screenW, height: 50+kStatusBarHeight))
         bar.backgroundColor=UIColor.red
@@ -57,52 +74,52 @@ class XgyOrderDetailViewController: TabmanViewController,PageboyViewControllerDa
             make.centerX.equalTo(bar)
         }
         self.view.addSubview(bar)
-        let bg=UIView()
+        bg=UIView()
         self.view.addSubview(bg)
         bg.snp.makeConstraints { (make) in
             make.left.equalTo(0)
             make.top.equalTo(bar.snp.bottom)
             make.right.equalTo(0)
-            make.height.equalTo(40)
+            make.height.equalTo(60)
         }
-
+        
+        
         uv_back.addOnClickListener(target: self, action: #selector(back))
         
-        vcs.append(PageDetailViewController(OrderID: OrderID))
-        vcs.append(PageAccessoryViewController(OrderID: OrderID))
-        vcs.append(PageBeyondViewController(OrderID: OrderID))
-        vcs.append(PageOrderRecordViewController(OrderID: OrderID))
-        vcs.append(PageExpressOfJJViewController(OrderID: OrderID))
-        vcs.append(PageExpressOfFJViewController(OrderID: OrderID))
-        self.dataSource = self
+        
         
         // Create bar
         let Tbar = TMBar.ButtonBar()
         Tbar.layout.transitionStyle = .progressive // Customize
-        Tbar.layout.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        Tbar.layout.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         // Add to view
-//        addBar(Tbar, dataSource: self, at: .custom(view: bg, layout: { (bar) in
-//            bar.translatesAutoresizingMaskIntoConstraints = false
-//            NSLayoutConstraint.activate([
-//                bar.topAnchor.constraint(equalTo: bg.topAnchor),
-//                bar.centerXAnchor.constraint(equalTo: bg.centerXAnchor)
-//                ])
-//        }))
+        
         Tbar.buttons.customize { (button) in
             button.tintColor = .black
             button.selectedTintColor = .red
-            button.font=UIFont.systemFont(ofSize: 13)
+            button.font=UIFont.systemFont(ofSize: 16)
         }
         
         Tbar.indicator.tintColor = .red
         Tbar.layout.contentMode = .intrinsic
         
+//                addBar(Tbar, dataSource: self, at: .top)
         addBar(Tbar, dataSource: self, at: .custom(view: bg, layout: nil))
-//        bar.isHidden=true
-//        bg.isHidden=true
+//        addBar(Tbar, dataSource: self, at: .custom(view: bg, layout: { (bar) in
+//            bar.translatesAutoresizingMaskIntoConstraints = false
+//            bar.snp.makeConstraints { (make) in
+//                make.left.equalTo(0)
+//                make.top.equalTo(0)
+//                make.right.equalTo(0)
+//                make.height.equalTo(60)
+//            }
+//        }))
+//                bar.isHidden=true
+//                bg.isHidden=true
         print(kStatusBarHeight)
-        self.additionalSafeAreaInsets=UIEdgeInsets(top: 90, left: 0, bottom: 0, right: 0)
-        print(self.calculateRequiredInsets())
+//        self.additionalSafeAreaInsets=UIEdgeInsets(top: 90, left: 0, bottom: 0, right: 0)
+        
+        
         self.view.backgroundColor=UIColor.white
         
         // Do any additional setup after loading the view.
@@ -120,5 +137,5 @@ class XgyOrderDetailViewController: TabmanViewController,PageboyViewControllerDa
      // Pass the selected object to the new view controller.
      }
      */
-
+    
 }

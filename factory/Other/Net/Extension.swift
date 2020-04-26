@@ -239,7 +239,7 @@ extension CAGradientLayer {
     //获取彩虹渐变层
     func rainbowLayer() -> CAGradientLayer {
         //定义渐变的颜色（7种彩虹色）
-        let gradientColors = ["#30CEED".color().cgColor,"#00AFD2".color().cgColor]
+        let gradientColors = [UIColor.red.cgColor,UIColor.red.cgColor]
          
         //定义每种颜色所在的位置
         let gradientLocations:[NSNumber] = [0.0, 1.0]

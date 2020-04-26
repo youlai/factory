@@ -46,7 +46,7 @@ class SettingViewController: UIViewController {
     }
     //MARK:检查更新
     @objc func update(){
-        VersionManager.init(appleId: "1488412445")
+        VersionManager.init(appleId: "1509650055")
     }
     //MARK:退出账号
     @objc func logout(){

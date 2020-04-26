@@ -36,7 +36,7 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Rm-VE-Knz">
                     <rect key="frame" x="20" y="354" width="374" height="50"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="phone" translatesAutoresizingMaskIntoConstraints="NO" id="o1b-vB-wuU">
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="phone_red" translatesAutoresizingMaskIntoConstraints="NO" id="o1b-vB-wuU">
                             <rect key="frame" x="10" y="10" width="30" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="30" id="16q-xv-nIY"/>
@@ -137,7 +137,7 @@
     </objects>
     <resources>
         <image name="icon" width="1024" height="1024"/>
-        <image name="password" width="128" height="128"/>
-        <image name="phone" width="128" height="128"/>
+        <image name="password" width="200" height="200"/>
+        <image name="phone_red" width="200" height="200"/>
     </resources>
 </document>

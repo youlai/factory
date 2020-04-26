@@ -15,6 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        
         // Override point for customization after application launch.
 //        UserID=nil
         if UserID==nil{
@@ -25,11 +27,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
 //            nav.addChild(RootTabBarViewController())
             nav.pushViewController(UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tab"), animated: true)
             window?.rootViewController=nav
+            self.window!.tintColor = UIColor.red
         }
         
-        _ = WXApi.registerApp("wx56e7e094b3185f2f")//appid字符串
+        _ = WXApi.registerApp("wxbaf9ee1d21a481af")//appid字符串
         
-        AMapServices.shared().apiKey = "3ddfece0558f7c50e2be5de50333e73e"
+        AMapServices.shared().apiKey = "c4aab911b2b3976551ff9aad1408f862"
         
         IQKeyboardManager.shared.enable = true
         
@@ -53,7 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         JPUSHService.register(forRemoteNotificationConfig: entity, delegate: self)
         //需要IDFA 功能，定向投放广告功能
         //let advertisingId = ASIdentifierManager.shared().advertisingIdentifier.uuidString
-        JPUSHService.setup(withOption: launchOptions, appKey: "8f19ec931fdccf757dec794f", channel: "App Store", apsForProduction: false, advertisingIdentifier: nil)
+        JPUSHService.setup(withOption: launchOptions, appKey: "8d0ccf1152ef5e9851aa9d3d", channel: "App Store", apsForProduction: false, advertisingIdentifier: nil)
         return true
     }
     
@@ -90,18 +93,55 @@ extension AppDelegate: WXApiDelegate {
     
     func application(_ application: UIApplication, handleOpen url: URL) -> Bool {
         switch url.scheme {
-        case "wx56e7e094b3185f2f":
+        case "wxbaf9ee1d21a481af":
             _ = WXApi.handleOpen(url, delegate: self)
         default:
             print("handleOpenUrl1")
         }
+        
+        if url.host == "safepay"{
+                    AlipaySDK.defaultService().processOrder(withPaymentResult: url){
+                        value in
+                        let code = value!
+                        let resultStatus = code["resultStatus"] as!String
+                        var content = ""
+                        switch resultStatus {
+                        case "9000":
+                            content = "支付成功"
+        //                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "aliPaySucceess"), object: content)
+                        case "8000":
+                            content = "订单正在处理中"
+        //                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "aliPayUnknowStatus"), object: content)
+                        case "4000":
+                            content = "支付失败"
+        //                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "aliPayDefeat"), object: content)
+                        case "5000":
+                            content = "重复请求"
+        //                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "aliPayDefeat"), object: content)
+                        case "6001":
+                            content = "中途取消"
+        //                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "aliPayDefeat"), object: content)
+                        case "6002":
+                            content = "网络连接出错"
+        //                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "aliPayDefault"), object: content)
+                        case "6004":
+                            content = "支付结果未知"
+        //                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "aliPayUnknowStatus"), object: content)
+                        default:
+                            content = "支付失败"
+        //                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "aliPayDefeat"), object: content)
+                            break
+                        }
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "aliPay"), object: (resultStatus,content))
+                    }
+                }
         return true
     }
     
     func application(_ application: UIApplication, open url: URL
         , sourceApplication: String?, annotation: Any) -> Bool {
         switch url.scheme {
-        case "wx56e7e094b3185f2f":
+        case "wxbaf9ee1d21a481af":
             _ = WXApi.handleOpen(url, delegate: self)
         default:
             print("handleOpenUrl2")
@@ -122,6 +162,7 @@ extension AppDelegate: WXApiDelegate {
             NotificationCenter.default.post(name: NSNotification.Name("微信登录"), object: authResp)
         } else if resp.isKind(of: PayResp.self) {
             let payResp = resp as! PayResp
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "WXPayNotification"), object: resp.errCode)
 //            if payResp.errCode == 0 {
 //                code = payResp.returnKey
 //            } else {

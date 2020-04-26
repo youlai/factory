@@ -40,28 +40,18 @@ class SubOrderViewController: TabmanViewController,PageboyViewControllerDataSour
     var vcs:[UIViewController]! = []
     var index:Int!
     var titles = ["远程费审核","配件审核", "待寄件", "留言"]
-    let statuses = [9,1,2,3]
-    /*
-     * 师傅端获取工单列表新接口
-     * 师傅端state
-     9、远程费申请待确认
-     0、待接单
-     1、已接待预约
-     2、服务中
-     3、返件单
-     4、质保单
-     5、完成待取机
-     6、已完成
-     7、预约不成功
-     8、配件单
-     * */
+    //    "急需处理", "待完成", "星标工单"11, "已完成", "质保单"4, "退单处理","所有工单"5
+    //    "远程费审核"9,"配件审核"1,"待寄件"10,"留言"15
+    //    "30日内"16,"30日以上"17
+    //    "待支付"2,"已支付"3
+    //    "取消工单"13,"关闭工单"12
     override func viewDidLoad() {
         super.viewDidLoad()
         self.index=0
-        vcs.append(V3_OrderTableViewController3(status: 11))
-        vcs.append(V3_OrderTableViewController3(status: 8))
-        vcs.append(V3_OrderTableViewController3(status: 12))
-        vcs.append(V3_OrderTableViewController3(status: 6))
+        vcs.append(V3_OrderTableViewController3(status: 9))
+        vcs.append(V3_OrderTableViewController3(status: 1))
+        vcs.append(V3_OrderTableViewController3(status: 10))
+        vcs.append(V3_OrderTableViewController3(status: 15))
         self.dataSource = self
         // Create bar
         let Tbar = TMBarView<TMHorizontalBarLayout, TMLabelBarButton, TMBlockBarIndicator>()
@@ -77,10 +67,12 @@ class SubOrderViewController: TabmanViewController,PageboyViewControllerDataSour
         //        }))
         Tbar.buttons.customize { (button) in
             button.tintColor = .black
-            button.selectedTintColor = "#048CFF".color()
+            button.selectedTintColor = .white
             button.font=UIFont.systemFont(ofSize: 13)
+            button.contentInset = UIEdgeInsets(top: 3, left: 5, bottom: 3, right: 5)
         }
         Tbar.indicator.cornerStyle = .eliptical
+        Tbar.indicator.backgroundColor=UIColor.red
         Tbar.layout.contentMode = .intrinsic
         //        Tbar.tintColor = .white
         Tbar.systemBar().backgroundStyle = .blur(style: .dark)
@@ -88,7 +80,7 @@ class SubOrderViewController: TabmanViewController,PageboyViewControllerDataSour
         //        Tbar.snp.makeConstraints { (make) in
         //            make.height.equalTo(60)
         //        }
-        Tbar.layout.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        Tbar.layout.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 10, right: 10)
         
         addBar(Tbar, dataSource: self, at: .top)
         //        addBar(Tbar, dataSource: self, at: .custom(view: bg, layout: nil))
@@ -97,64 +89,25 @@ class SubOrderViewController: TabmanViewController,PageboyViewControllerDataSour
         print(kStatusBarHeight)
         //        self.additionalSafeAreaInsets=UIEdgeInsets(top: 110, left: 0, bottom: 0, right: 0)
         print(self.calculateRequiredInsets())
-        self.view.backgroundColor=UIColor.white
-        self.view.tintColor = .white
+        self.view.backgroundColor=UIColor.red
+        self.view.tintColor = .red
         //MARK:接收通知
-        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("接单成功"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("预约成功"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("预约不成功"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("已完成"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("待返件"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("待审核"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("工单数量"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("确认收货"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reload(noti:)), name: NSNotification.Name("待寄件"), object: nil)
     }
     //MARK:接收通知刷新接单列表
     @objc func reload(noti:Notification){
-        if noti.name.rawValue=="确认收货"{
-            self.index=0
-        }
-        if noti.name.rawValue=="接单成功"{
+//        vcs.removeAll()
+//        vcs.append(V3_OrderTableViewController3(status: 9))
+//        vcs.append(V3_OrderTableViewController3(status: 1))
+//        vcs.append(V3_OrderTableViewController3(status: 10))
+//        vcs.append(V3_OrderTableViewController3(status: 15))
+        if noti.name.rawValue=="待审核"{
             self.index=1
         }
-        if noti.name.rawValue=="待审核"{
+        if noti.name.rawValue=="待寄件"{
             self.index=2
         }
-        if noti.name.rawValue=="预约成功"{
-            self.index=2
-        }
-        if noti.name.rawValue=="工单数量"{
-            let orderStatus=noti.object as! Int
-            switch orderStatus {
-            case 13:
-                self.index=0
-            case 14:
-                self.index=0
-            case 15:
-                self.index=0
-            case 1:
-                self.index=1
-            case 16:
-                self.index=1
-            case 2:
-                self.index=2
-            case 11:
-                self.index=3
-            case 8:
-                self.index=4
-            case 12:
-                self.index=5
-            case 6:
-                self.index=6
-            default:
-                self.index=0
-            }
-        }
-        vcs.removeAll()
-        vcs.append(V3_OrderTableViewController3(status: 11))
-        vcs.append(V3_OrderTableViewController3(status: 8))
-        vcs.append(V3_OrderTableViewController3(status: 12))
-        vcs.append(V3_OrderTableViewController3(status: 6))
         self.reloadData()
     }
     @objc func back(){

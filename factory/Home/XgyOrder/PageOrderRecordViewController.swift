@@ -24,6 +24,7 @@ class PageOrderRecordViewController: UITableViewController {
         tableView.separatorStyle = .none
         tableView.backgroundColor="#f2f2f2".color()
         tableView.register(UINib(nibName: "XgyOrderRecordTableViewCell", bundle: nil), forCellReuseIdentifier: "re")
+        tableView.contentInset=UIEdgeInsets(top: tabOffset-kStatusBarHeight, left: 0, bottom: 0, right: 0)
         getOrderRecordByOrderID()
         // Do any additional setup after loading the view.
     }

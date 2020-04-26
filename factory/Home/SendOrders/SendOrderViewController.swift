@@ -180,14 +180,14 @@ class SendOrderViewController: UIViewController,LBXScanViewControllerDelegate {
     @objc func service_type(){
         if flag1 != "1"{
             flag1="1"
-            iv_repair.image=UIImage(named: "ic_check_true")
-            iv_install.image=UIImage(named: "ic_check_false")
+            iv_repair.image=UIImage(named: "yuangou")
+            iv_install.image=UIImage(named: "circle")
             usv_install.isHidden=true
             usv_repair.isHidden=false
         }else{
             flag1="2"
-            iv_repair.image=UIImage(named: "ic_check_false")
-            iv_install.image=UIImage(named: "ic_check_true")
+            iv_repair.image=UIImage(named: "circle")
+            iv_install.image=UIImage(named: "yuangou")
             usv_install.isHidden=false
             usv_repair.isHidden=true
         }
@@ -195,26 +195,26 @@ class SendOrderViewController: UIViewController,LBXScanViewControllerDelegate {
     @objc func yn(){
         if flag2 == "N"{
             flag2="Y"
-            iv_yes.image=UIImage(named: "ic_check_true")
-            iv_no.image=UIImage(named: "ic_check_false")
+            iv_yes.image=UIImage(named: "yuangou")
+            iv_no.image=UIImage(named: "circle")
         }else{
             flag2="N"
-            iv_yes.image=UIImage(named: "ic_check_false")
-            iv_no.image=UIImage(named: "ic_check_true")
+            iv_yes.image=UIImage(named: "circle")
+            iv_no.image=UIImage(named: "yuangou")
         }
     }
     @objc func qs(){
         
         if flag3 == "N"{
             flag3="Y"
-            iv_yqs.image=UIImage(named: "ic_check_true")
-            iv_wqs.image=UIImage(named: "ic_check_false")
+            iv_yqs.image=UIImage(named: "yuangou")
+            iv_wqs.image=UIImage(named: "circle")
             uv_qrcode.isHidden=true
             uv_install.layer.maskedCorners=CACornerMask(rawValue: CACornerMask.layerMinXMinYCorner.rawValue|CACornerMask.layerMaxXMinYCorner.rawValue|CACornerMask.layerMinXMaxYCorner.rawValue|CACornerMask.layerMaxXMaxYCorner.rawValue)
         }else{
             flag3="N"
-            iv_yqs.image=UIImage(named: "ic_check_false")
-            iv_wqs.image=UIImage(named: "ic_check_true")
+            iv_yqs.image=UIImage(named: "circle")
+            iv_wqs.image=UIImage(named: "yuangou")
             uv_qrcode.isHidden=false
             uv_install.layer.maskedCorners=CACornerMask(rawValue: CACornerMask.layerMinXMinYCorner.rawValue|CACornerMask.layerMaxXMinYCorner.rawValue)
         }

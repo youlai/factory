@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SKPhotoBrowser
 
 class PageAccessoryViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,LBXScanViewControllerDelegate {
     func scanFinished(scanResult: LBXScanResult, error: String?) {
@@ -14,7 +15,8 @@ class PageAccessoryViewController: UIViewController,UITableViewDelegate,UITableV
     }
     
     
-    
+    @IBOutlet weak var uv_expressno: UIView!
+    @IBOutlet weak var lb_expressno: UILabel!
     @IBOutlet weak var lb_type: UILabel!
     @IBOutlet weak var lb_memo: UILabel!
     @IBOutlet weak var tableview: UITableView!
@@ -23,6 +25,8 @@ class PageAccessoryViewController: UIViewController,UITableViewDelegate,UITableV
     @IBOutlet weak var uv_no: UIView!
     @IBOutlet weak var uv_yes: UIView!
     @IBOutlet weak var usv_yes: UIStackView!
+    @IBOutlet weak var btn_reject: UIButton!
+    @IBOutlet weak var btn_pass: UIButton!
     @IBOutlet weak var btn_send: UIButton!
     @IBOutlet weak var lb_addr: UILabel!
     @IBOutlet weak var uv_csdf: UIView!
@@ -48,8 +52,10 @@ class PageAccessoryViewController: UIViewController,UITableViewDelegate,UITableV
     var PostPayType="1" //1厂商到付 2维修商现付
     var addr:mShippingAddress!
     
-    var AccessoryState:String!
-
+    var AccessoryAndServiceApplyState:String!
+    var AccessorySequencyStr:String!//寄件类型
+    
+    
     var dataSource=[mOrderAccessroyDetail]()
     init(OrderID:String){
         super.init(nibName: nil, bundle: nil)
@@ -61,12 +67,17 @@ class PageAccessoryViewController: UIViewController,UITableViewDelegate,UITableV
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        //        self.view.safeAreaInsets=UIEdgeInsets(top: 150, left: 0, bottom: 0, right: 0)
         btn_send.layer.cornerRadius=5
+        btn_pass.layer.cornerRadius=5
+        btn_reject.layer.cornerRadius=5
         btn_modify.layer.cornerRadius=5
         uv_no.addOnClickListener(target: self, action: #selector(yn))
         uv_yes.addOnClickListener(target: self, action: #selector(yn))
         uv_csdf.addOnClickListener(target: self, action: #selector(xf))
         uv_xf.addOnClickListener(target: self, action: #selector(xf))
+        btn_pass.addOnClickListener(target: self, action: #selector(ok))
+        btn_reject.addOnClickListener(target: self, action: #selector(reject))
         btn_send.addOnClickListener(target: self, action: #selector(send(sender:)))
         btn_modify.addOnClickListener(target: self, action: #selector(chooseAddr))
         NotificationCenter.default.addObserver(self, selector: #selector(update), name: NSNotification.Name("choose"), object: nil)
@@ -76,7 +87,7 @@ class PageAccessoryViewController: UIViewController,UITableViewDelegate,UITableV
         tableview.register(UINib(nibName: "AccessoryTableViewCell", bundle: nil), forCellReuseIdentifier: "re")
         getOrderDetail()
     }
-    //工单详情
+    //MARK:工单详情
     func getOrderDetail(){
         let d = ["OrderID":OrderID]as[String:String]
         AlamofireHelper.post(url: GetOrderInfo, parameters: d, successHandler: {[weak self](res)in
@@ -86,27 +97,63 @@ class PageAccessoryViewController: UIViewController,UITableViewDelegate,UITableV
             ss.IsReturn=detail.IsReturn!
             ss.PostPayType=detail.PostPayType!
             ss.AddressBack=detail.AddressBack!
+            //MARK:0 待审核 1审核通过 -1拒绝 2拒绝自购件 发厂家寄件
+            if detail.AccessoryAndServiceApplyState == "0" {
+                ss.btn_pass.isHidden=false
+                ss.btn_reject.isHidden=false
+                ss.btn_send.isHidden=true
+                ss.uv_yes.isUserInteractionEnabled=true
+                ss.uv_no.isUserInteractionEnabled=true
+                ss.uv_csdf.isUserInteractionEnabled=true
+                ss.uv_xf.isUserInteractionEnabled=true
+            }else if detail.AccessoryAndServiceApplyState == "-1" {
+                ss.btn_pass.isHidden=true
+                ss.btn_reject.isHidden=true
+                ss.btn_send.isHidden=true
+                ss.uv_yes.isUserInteractionEnabled=false
+                ss.uv_no.isUserInteractionEnabled=false
+                ss.uv_csdf.isUserInteractionEnabled=false
+                ss.uv_xf.isUserInteractionEnabled=false
+            }else{
+                if detail.ExpressNo==""{//配件是否发货
+                    ss.btn_send.isHidden=false
+                    ss.uv_expressno.isHidden=true
+                }else{
+                    ss.btn_send.isHidden=true
+                    ss.uv_expressno.isHidden=false
+                    ss.lb_expressno.text=detail.ExpressNo!
+                }
+                ss.btn_pass.isHidden=true
+                ss.btn_reject.isHidden=true
+                
+                ss.uv_yes.isUserInteractionEnabled=false
+                ss.uv_no.isUserInteractionEnabled=false
+                ss.uv_csdf.isUserInteractionEnabled=false
+                ss.uv_xf.isUserInteractionEnabled=false
+            }
+            
             if ss.IsReturn == "1"{
-                ss.iv_yes.image=UIImage(named: "ic_check_true")
-                ss.iv_no.image=UIImage(named: "ic_check_false")
+                ss.iv_yes.image=UIImage(named: "yuangou")
+                ss.iv_no.image=UIImage(named: "circle")
                 ss.usv_yes.isHidden=false
             }else{
-                ss.iv_yes.image=UIImage(named: "ic_check_false")
-                ss.iv_no.image=UIImage(named: "ic_check_true")
+                ss.iv_yes.image=UIImage(named: "circle")
+                ss.iv_no.image=UIImage(named: "yuangou")
                 ss.usv_yes.isHidden=true
             }
             if ss.PostPayType == "1"{
-                ss.iv_csdf.image=UIImage(named: "ic_check_true")
-                ss.iv_xf.image=UIImage(named: "ic_check_false")
+                ss.iv_csdf.image=UIImage(named: "yuangou")
+                ss.iv_xf.image=UIImage(named: "circle")
             }else{
-                ss.iv_csdf.image=UIImage(named: "ic_check_false")
-                ss.iv_xf.image=UIImage(named: "ic_check_true")
+                ss.iv_csdf.image=UIImage(named: "circle")
+                ss.iv_xf.image=UIImage(named: "yuangou")
             }
             ss.lb_addr.text=detail.AddressBack!
             if ss.AddressBack==nil{
                 ss.getAddress()
             }
             ss.lb_memo.text=detail.AccessoryMemo
+            ss.AccessorySequencyStr=detail.AccessorySequencyStr
             ss.lb_type.text=detail.AccessorySequencyStr
             ss.dataSource=detail.OrderAccessroyDetail
             if ss.dataSource.count>0{
@@ -123,60 +170,17 @@ class PageAccessoryViewController: UIViewController,UITableViewDelegate,UITableV
         }
     }
 }
-//配件列表
+//MARK:配件列表
 extension PageAccessoryViewController{
-    @objc func approve(){
-        popviewOfAccessory = ZXPopView.init(frame: CGRect(x: 0, y: 0, width: screenW, height: screenH))
-        approveAccessoryView=Bundle.main.loadNibNamed("ApproveAccessoryView", owner: nil, options: nil)?[0] as? ApproveAccessoryView
-        approveAccessoryView.layer.cornerRadius=10
-        approveAccessoryView.uv_name.layer.cornerRadius=5
-        approveAccessoryView.uv_price.layer.cornerRadius=5
-        approveAccessoryView.btn_submit.addOnClickListener(target: self, action: #selector(approveok))
-        approveAccessoryView.btn_cancel.addOnClickListener(target: self, action: #selector(dismissviewOfApprove))
-        popviewOfAccessory.contenView = approveAccessoryView
-        popviewOfAccessory.anim = 0
-        approveAccessoryView.snp.makeConstraints { (make) in
-            make.width.equalTo(screenW-20)
-            make.left.equalTo(10)
-            make.right.equalTo(-10)
-            make.height.equalTo(235)
-            make.center.equalToSuperview()
-        }
-        popviewOfAccessory.showInView(view: self.view)
-    }
-    @objc func dismissviewOfApprove(){
-        popviewOfAccessory.dismissView()
-    }
-    @objc func updateFactoryAccessorybyFactory(){
-        let d = [
-            "Id":AccessoryID,
-            "AccessoryName":AccessoryName,
-            "AccessoryPrice":AccessoryPrice,
-            "OrderAccessoryId":OrderAccessoryID
-            ]as[String:String]
-        AlamofireHelper.post(url: UpdateFactoryAccessorybyFactory, parameters: d, successHandler: {[weak self](res)in
-            HUD.dismiss()
-            guard let ss = self else {return}
-            if res["Data"]["Item1"].boolValue{
-                HUD.showText("审核成功")
-                ss.getOrderDetail()
-            }else{
-                HUD.showText("审核失败")
-            }
-            
-        }){[weak self] (error) in
-            HUD.dismiss()
-            guard let ss = self else {return}
-        }
-    }
-    func approveOrderAccessoryByModifyPrice(){
+    //MARK:审核配件和服务
+    @objc func approveOrderAccessoryAndService(){
         let d = [
             "OrderID":OrderID,
-            "OrderAccessoryID":OrderAccessoryID,
-            "NewMoney":"0",
-            "AccessoryApplyState":AccessoryState
+            "AccessoryAndServiceApplyState":AccessoryAndServiceApplyState,
+            //            "PostPayType":PostPayType,
+            //            "IsReturn":IsReturn
             ]as[String:String]
-        AlamofireHelper.post(url: ApproveOrderAccessoryByModifyPrice, parameters: d, successHandler: {[weak self](res)in
+        AlamofireHelper.post(url: ApproveOrderAccessoryAndService, parameters: d, successHandler: {[weak self](res)in
             HUD.dismiss()
             guard let ss = self else {return}
             if res["Data"]["Item1"].boolValue{
@@ -199,40 +203,47 @@ extension PageAccessoryViewController{
         let cell=tableview.dequeueReusableCell(withIdentifier: "re")as!AccessoryTableViewCell
         cell.selectionStyle = .none
         let item=dataSource[indexPath.row]
-        cell.btn_reject.layer.cornerRadius=5
-        cell.btn_ok.layer.cornerRadius=5
         cell.lb_name.text=item.FAccessoryName
-        cell.lb_count.text="￥\(item.Price)/\(item.Quantity)个"
-        if item.State=="0"{
-            cell.usv_btn.isHidden=false
-            cell.lb_status.isHidden=true
-        }else{
-            cell.usv_btn.isHidden=true
-            cell.lb_status.isHidden=false
-            if item.State=="1"{
-                cell.lb_status.text="已通过"
-            }else{
-                cell.lb_status.text="已拒绝"
-            }
-        }
-        cell.btn_reject.addTarget(self, action: #selector(reject(sender:)), for: UIControl.Event.touchUpInside)
-        cell.btn_ok.addTarget(self, action: #selector(ok(sender:)), for: UIControl.Event.touchUpInside)
-        cell.btn_reject.tag = indexPath.row
-        cell.btn_ok.tag = indexPath.row
+        cell.lb_count.text="\(item.Quantity)个"
+        cell.iv_photo1.setImage(path: URL(string: "https://img.xigyu.com/Pics/Accessory/\(item.Photo1!)")!)
+        cell.iv_photo2.setImage(path: URL(string: "https://img.xigyu.com/Pics/Accessory/\(item.Photo2!)")!)
+        let tap1=UITapGestureRecognizer(target: self, action: #selector(biger1(sender:)))
+        let tap2=UITapGestureRecognizer(target: self, action: #selector(biger1(sender:)))
+        cell.iv_photo1.addGestureRecognizer(tap1)
+        cell.iv_photo2.addGestureRecognizer(tap2)
+        tap1.view!.tag=indexPath.row
+        tap2.view!.tag=indexPath.row
         return cell
     }
-    //拒绝 -1
-    @objc func reject(sender:UIButton){
-        let item=dataSource[sender.tag]
-        AccessoryID="\(item.FAccessoryID)"
-        OrderAccessoryID="\(item.Id)"
-        AccessoryName=item.FAccessoryName
-        AccessoryPrice="\(item.Price)"
-        AccessoryState="-1"
+    //MARK:查看大图
+    @objc func biger1(sender:UITapGestureRecognizer!){
+        let item=dataSource[sender.view!.tag]
+        // URL pattern snippet
+        var images = [SKPhoto]()
+        images.append(SKPhoto.photoWithImageURL("https://img.xigyu.com/Pics/Accessory/\(item.Photo1!)"))
+        images.append(SKPhoto.photoWithImageURL("https://img.xigyu.com/Pics/Accessory/\(item.Photo2!)"))
+        
+        // create PhotoBrowser Instance, and present.
+        let browser = SKPhotoBrowser(photos: images)
+        self.present(browser, animated: true, completion: {})
+    }
+    //MARK:拒绝 -1
+    @objc func reject(){
+        var message=""
+        if self.AccessorySequencyStr=="厂家寄件"{
+            message = "是否拒绝配件申请？"
+        }else{
+            message = "亲，拒绝自购件申请，将会发送厂家寄件哦"
+        }
         //创建UIAlertController(警告窗口)
-        let alert = UIAlertController(title: "提示", message: "是否拒绝？", preferredStyle: .alert)
+        let alert = UIAlertController(title: "提示", message: message, preferredStyle: .alert)
         let OK = UIAlertAction(title: "确定", style: .default) { (UIAlertAction) in
-            self.approveOrderAccessoryByModifyPrice()
+            if self.AccessorySequencyStr=="厂家寄件"{
+                self.AccessoryAndServiceApplyState = "-1"
+            }else{
+                self.AccessoryAndServiceApplyState = "2"
+            }
+            self.approveOrderAccessoryAndService()
         }
         let Cancel = UIAlertAction(title: "取消", style: .cancel) { (UIAlertAction) in
             print("you selected cancel")
@@ -243,41 +254,36 @@ extension PageAccessoryViewController{
         //以模态方式弹出
         self.present(alert, animated: true, completion: nil)
     }
-    //通过 1
-    @objc func ok(sender:UIButton){
-        let item=dataSource[sender.tag]
-        AccessoryID="\(item.FAccessoryID)"
-        OrderAccessoryID="\(item.Id)"
-        AccessoryState="1"
-
-        approve()
-    }
-    //通过 提交
-    @objc func approveok(){
-        let AccessoryName=approveAccessoryView.tf_name.text
-        let AccessoryPrice=approveAccessoryView.tf_price.text
-        if !AccessoryName!.isEmpty{
-            self.AccessoryName=AccessoryName
+    //MARK:通过 1
+    @objc func ok(){
+        //创建UIAlertController(警告窗口)
+        let alert = UIAlertController(title: "提示", message: "是否同意配件申请？", preferredStyle: .alert)
+        let OK = UIAlertAction(title: "确定", style: .default) { (UIAlertAction) in
+            self.AccessoryAndServiceApplyState = "1"
+            self.approveOrderAccessoryAndService()
         }
-        if !AccessoryPrice!.isEmpty{
-            self.AccessoryPrice=AccessoryPrice
+        let Cancel = UIAlertAction(title: "取消", style: .cancel) { (UIAlertAction) in
+            print("you selected cancel")
         }
-        updateFactoryAccessorybyFactory()
-        approveOrderAccessoryByModifyPrice()
+        //将Actiont加入到AlertController
+        alert.addAction(OK)
+        alert.addAction(Cancel)
+        //以模态方式弹出
+        self.present(alert, animated: true, completion: nil)
     }
 }
-//旧件返厂
+//MARK:旧件返厂
 extension PageAccessoryViewController{
     @objc func yn(){
         if IsReturn == "2"{
             IsReturn="1"
-            iv_yes.image=UIImage(named: "ic_check_true")
-            iv_no.image=UIImage(named: "ic_check_false")
+            iv_yes.image=UIImage(named: "yuangou")
+            iv_no.image=UIImage(named: "circle")
             usv_yes.isHidden=false
         }else{
             IsReturn="2"
-            iv_yes.image=UIImage(named: "ic_check_false")
-            iv_no.image=UIImage(named: "ic_check_true")
+            iv_yes.image=UIImage(named: "circle")
+            iv_no.image=UIImage(named: "yuangou")
             usv_yes.isHidden=true
         }
         if IsReturn=="1"&&AddressBack==nil{
@@ -289,12 +295,12 @@ extension PageAccessoryViewController{
     @objc func xf(){
         if PostPayType == "2"{
             PostPayType="1"
-            iv_csdf.image=UIImage(named: "ic_check_true")
-            iv_xf.image=UIImage(named: "ic_check_false")
+            iv_csdf.image=UIImage(named: "yuangou")
+            iv_xf.image=UIImage(named: "circle")
         }else{
             PostPayType="2"
-            iv_csdf.image=UIImage(named: "ic_check_false")
-            iv_xf.image=UIImage(named: "ic_check_true")
+            iv_csdf.image=UIImage(named: "circle")
+            iv_xf.image=UIImage(named: "yuangou")
         }
         updateIsReturnByOrderID()
     }
@@ -303,46 +309,26 @@ extension PageAccessoryViewController{
     }
     @objc func update(noti: Notification){
         addr=(noti.object as!mShippingAddress)
-//        AddressBack="\(addr.RegionFullName!)\(addr.Address!)(\(addr.ShipTo!))收\(addr.Phone!)"
-//        lb_addr.text="\(addr.RegionFullName!)\(addr.Address!)(\(addr.ShipTo!))收\(addr.Phone!)"
+        AddressBack="\(addr.Province!)\(addr.City!)\(addr.Area!)\(addr.District!)\(addr.Address!)(\(addr.UserName!))收\(addr.Phone!)"
+        lb_addr.text=AddressBack
         updateIsReturnByOrderID()
     }
     func getAddress(){
-//        var d = ["userkey":UserID!,
-//                 "app_key":app_key,
-//                 "timestamp":getTimestamp()
-//            ] as [String : String]
-//        let sign=SignTopRequest(params: d)
-//        d["sign"]=sign
-//        AlamofireHelper.get(url: GetShippingAddressList, parameters: d, successHandler: {[weak self](res)in
-//            HUD.dismiss()
-//            guard let ss = self else {return}
-//            let addrList=mShippingAddressList.init(json: res)
-//            var shippingAddr:mShippingAddress!
-//            if addrList.ShippingAddress.count>0{
-//                for addr in addrList.ShippingAddress{
-//                    if addr.IsDefault{
-//                        shippingAddr=addr
-//                    }
-//                }
-//                if shippingAddr == nil{
-//                    shippingAddr=addrList.ShippingAddress[0]
-//                }
-//                ss.addr=shippingAddr
-//                ss.AddressBack="\(ss.addr.RegionFullName!)\(ss.addr.Address!)(\(ss.addr.ShipTo!))收\(ss.addr.Phone!)"
-//                ss.lb_addr.text="\(ss.addr.RegionFullName!)\(ss.addr.Address!)(\(ss.addr.ShipTo!))收\(ss.addr.Phone!)"
-//                ss.btn_modify.setTitle("修改地址", for: .normal)
-//            }else{
-//                ss.lb_addr.text=""
-//                ss.btn_modify.setTitle("添加地址", for: .normal)
-//            }
-//
-//        }){[weak self] (error) in
-//            HUD.dismiss()
-//            guard let ss = self else {return}
-//        }
+        var d = ["UserID":UserID!] as [String : String]
+        AlamofireHelper.post(url: GetAccountAddress, parameters: d, successHandler: {[weak self](res)in
+            HUD.dismiss()
+            guard let ss = self else {return}
+            let dataSource=res["Data"].arrayValue.compactMap({ mShippingAddress(json: $0)})
+            if dataSource.count>0{
+                ss.addr=dataSource[0]
+                ss.lb_addr.text="\(ss.addr.Province!)\(ss.addr.City!)\(ss.addr.Area!)\(ss.addr.District!)\(ss.addr.Address!)(\(ss.addr.UserName!))收\(ss.addr.Phone!)"
+            }
+        }){[weak self] (error) in
+            HUD.dismiss()
+            guard let ss = self else {return}
+        }
     }
-    //旧件是否需要返厂
+    //MARK:旧件是否需要返厂
     func updateIsReturnByOrderID(){
         let d = [
             "OrderID":OrderID,
@@ -365,7 +351,7 @@ extension PageAccessoryViewController{
         }
     }
 }
-//配件发货
+//MARK:配件发货
 extension PageAccessoryViewController{
     @objc func send(sender:UIButton){
         popview = ZXPopView.init(frame: CGRect(x: 0, y: 0, width: screenW, height: screenH))
@@ -399,7 +385,7 @@ extension PageAccessoryViewController{
         }
     }
     func scanQrCode() {
-        //设置扫码区域参数
+        //MARK:设置扫码区域参数
         var style = LBXScanViewStyle()
         style.centerUpOffset = 60;
         style.xScanRetangleOffset = 30;
@@ -435,6 +421,7 @@ extension PageAccessoryViewController{
             guard let ss = self else {return}
             if res["Data"]["Item1"].boolValue{
                 ss.popview.dismissView()
+                ss.getOrderDetail()
             }
             HUD.showText(res["Data"]["Item2"].stringValue)
         }){[weak self] (error) in

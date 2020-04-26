@@ -18,7 +18,7 @@ struct mXgyOrderDetail {
             var status=""
             switch self.AccessoryState {
             case "0":
-                status="厂家自购件"
+                status="厂家寄件"
             case "1":
                 status="师傅自购件"
             case "2":
@@ -131,6 +131,7 @@ struct mXgyOrderDetail {
     var SendOrderList = [mSendOrderList]()
     var OrderAccessroyDetail = [mOrderAccessroyDetail]()
     var OrderBeyondImg = [mOrderBeyondImg]()
+    var LeavemessageList = [mLeavemessageList]()
     var PostMoney: Int = 0
     var Id: Int = 0
     var ProvinceCode: String?
@@ -186,6 +187,7 @@ struct mXgyOrderDetail {
     var OrderPayStr: String?
     var ServiceApplyState: String?
     var OrgSendUser: String?
+    var AccessoryAndServiceApplyState: String?
     
     init(json: JSON) {
         AppraiseDate = json["AppraiseDate"].stringValue
@@ -246,6 +248,7 @@ struct mXgyOrderDetail {
         SendOrderList = json["SendOrderList"].arrayValue.compactMap({ mSendOrderList(json: $0)})
         OrderAccessroyDetail = json["OrderAccessroyDetail"].arrayValue.compactMap({ mOrderAccessroyDetail(json: $0)})
         OrderBeyondImg = json["OrderBeyondImg"].arrayValue.compactMap({ mOrderBeyondImg(json: $0)})
+        LeavemessageList = json["LeavemessageList"].arrayValue.compactMap({ mLeavemessageList(json: $0)})
         PostMoney = json["PostMoney"].intValue
         Id = json["Id"].intValue
         ProvinceCode = json["ProvinceCode"].stringValue
@@ -301,6 +304,7 @@ struct mXgyOrderDetail {
         OrderPayStr = json["OrderPayStr"].stringValue
         ServiceApplyState = json["ServiceApplyState"].stringValue
         OrgSendUser = json["OrgSendUser"].stringValue
+        AccessoryAndServiceApplyState = json["AccessoryAndServiceApplyState"].stringValue
     }
 }
 
@@ -474,5 +478,42 @@ struct mOrderBeyondImg {
         page = json["page"].intValue
         IsUse = json["IsUse"].stringValue
         Id = json["Id"].intValue
+    }
+}
+struct mLeavemessageList {
+    var limit: Int = 0
+    var factoryIslook: String?
+    var Id: Int = 0
+    var photo: String?
+    var UserName: String?
+    var IsUse: String?
+    var UserId: String?
+    var Content: String?
+    var LeaveMessageId: Int = 0
+    var platformIslook: String?
+    var OrderId: Int = 0
+    var workerIslook: String?
+    var page: Int = 0
+    var Version: Int = 0
+    var CreateDate: String?
+    var `Type`: String?
+
+    init(json: JSON) {
+        limit = json["limit"].intValue
+        factoryIslook = json["factoryIslook"].stringValue
+        Id = json["Id"].intValue
+        photo = json["photo"].stringValue
+        UserName = json["UserName"].stringValue
+        IsUse = json["IsUse"].stringValue
+        UserId = json["UserId"].stringValue
+        Content = json["Content"].stringValue
+        LeaveMessageId = json["LeaveMessageId"].intValue
+        platformIslook = json["platformIslook"].stringValue
+        OrderId = json["OrderId"].intValue
+        workerIslook = json["workerIslook"].stringValue
+        page = json["page"].intValue
+        Version = json["Version"].intValue
+        CreateDate = json["CreateDate"].stringValue
+        Type = json["Type"].stringValue
     }
 }

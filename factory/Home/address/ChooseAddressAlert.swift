@@ -51,7 +51,7 @@ class ChooseAddressAlert: UIView , UITableViewDataSource, UITableViewDelegate{
         addSubview(bgView)
 
         closeview = UIImageView.init()
-        closeview.image=UIImage(named: "icon_cha")
+        closeview.image=UIImage(named: "cancel")
         bgView.addSubview(closeview)
         closeview.snp.makeConstraints { (mark) in
             mark.width.equalTo(kSize(width: 20))

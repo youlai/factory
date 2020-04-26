@@ -1038,7 +1038,7 @@
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="请填写故障描述"/>
+                                                <userDefinedRuntimeAttribute type="string" keyPath="placeholder" value="请输入您的描述与要求"/>
                                             </userDefinedRuntimeAttributes>
                                         </textView>
                                     </subviews>

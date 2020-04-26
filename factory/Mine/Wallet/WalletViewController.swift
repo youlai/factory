@@ -85,7 +85,7 @@ class WalletViewController: UIViewController {
         if userOfxgy == nil{
             return
         }
-        self.navigationController?.pushViewController(WithDrawViewController(balance: userOfxgy.TotalMoney-userOfxgy.FrozenMoney), animated: true)
+//        self.navigationController?.pushViewController(WithDrawViewController(balance: userOfxgy.TotalMoney-userOfxgy.FrozenMoney), animated: true)
     }
     @objc func recharge(){
         self.navigationController?.pushViewController(RechargeViewController(), animated: true)

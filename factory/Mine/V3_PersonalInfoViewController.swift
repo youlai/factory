@@ -13,19 +13,19 @@ class V3_PersonalInfoViewController: UIViewController,UIImagePickerControllerDel
     @IBOutlet weak var uv_back: UIView!
     @IBOutlet weak var uv_avatar: UIView!
     @IBOutlet weak var uv_name: UIView!
-    @IBOutlet weak var uv_jjphone: UIView!
+    @IBOutlet weak var lb_Name: UILabel!
     @IBOutlet weak var uv_addr: UIView!
-    @IBOutlet weak var lb_truename: UILabel!
+    @IBOutlet weak var lb_companyName: UILabel!
     @IBOutlet weak var lb_phone: UILabel!
-    @IBOutlet weak var lb_jjphone: UILabel!
+    @IBOutlet weak var lb_license: UILabel!
+    @IBOutlet weak var lb_addr: UILabel!
     var userOfxgy:UserOfxgy!
     var nick=""
     override func viewDidLoad() {
         super.viewDidLoad()
         uv_back.addOnClickListener(target: self, action: #selector(back))
         uv_avatar.addOnClickListener(target: self, action: #selector(avator))
-//        uv_name.addOnClickListener(target: self, action: #selector(toCertificate))
-        uv_jjphone.addOnClickListener(target: self, action: #selector(addEmergencyContact))
+        uv_name.addOnClickListener(target: self, action: #selector(changeNick))
         uv_addr.addOnClickListener(target: self, action: #selector(myaddr))
         iv_avatar.layer.cornerRadius=25
         getUserInfoList()
@@ -39,44 +39,6 @@ class V3_PersonalInfoViewController: UIViewController,UIImagePickerControllerDel
         let phoneRegex: String = "^((13[0-9])|(15[^4,\\D])|(18[0,0-9])|(17[0,0-9]))\\d{8}$"
         let phoneTest = NSPredicate(format: "SELF MATCHES %@", phoneRegex)
         return phoneTest.evaluate(with: phone)
-    }
-    //MARK:设置紧急联系电话
-    @objc func addEmergencyContact(){
-        let alertController = UIAlertController(title: "设置紧急联系人电话", message: "", preferredStyle: UIAlertController.Style.alert);
-        alertController.addTextField { (textField:UITextField!) -> Void in
-            textField.placeholder = "紧急联系人电话"
-            textField.keyboardType = .phonePad
-        }
-        let cancelAction = UIAlertAction(title: "取消", style: UIAlertAction.Style.cancel, handler: nil )
-        let okAction = UIAlertAction(title: "好的", style: UIAlertAction.Style.default) { (ACTION) -> Void in
-            let tf_phone = alertController.textFields!.first! as UITextField
-            let phone=tf_phone.text!
-            if phone.isEmpty{
-                HUD.showText("电话不能为空")
-                return
-            }
-            if !self.validateMobile(phone: phone){
-                HUD.showText("手机号格式不正确")
-                return
-            }
-            let d = ["UserId":UserID,
-                             "emergencyContact":phone
-                        ] as! [String : String]
-            print(d)
-                    AlamofireHelper.post(url: UpdateEmergencyContact, parameters: d, successHandler: {[weak self](res)in
-                        HUD.dismiss()
-                        guard let ss = self else {return}
-                        if res["Data"]["Item1"].boolValue{
-                            ss.lb_jjphone.text=phone
-                        }
-                    }){[weak self] (error) in
-                        HUD.dismiss()
-                        guard let ss = self else {return}
-                    }
-        }
-        alertController.addAction(cancelAction);
-        alertController.addAction(okAction);
-        self.present(alertController, animated: true, completion: nil)
     }
     //MARK:更换昵称
     @objc func changeNick(){
@@ -104,7 +66,7 @@ class V3_PersonalInfoViewController: UIViewController,UIImagePickerControllerDel
             HUD.dismiss()
             guard let ss = self else {return}
             if res["Data"]["Item1"].boolValue{
-//                ss.lb_shopname.text=ss.nick
+                ss.lb_Name.text=ss.nick
                 //MARK:发送通知
                 NotificationCenter.default.post(name: NSNotification.Name("更新用户信息"), object: nil)
             }
@@ -183,14 +145,6 @@ class V3_PersonalInfoViewController: UIViewController,UIImagePickerControllerDel
     @objc func toCertificate(){
 //        self.navigationController?.pushViewController(V3_CertificationViewController(), animated: true)
     }
-    //MARK:修改服务区域
-    @objc func changeServiceArea(){
-//        self.navigationController?.pushViewController(UpdateAreaViewController(list: []), animated: true)
-    }
-    //MARK:我的技能
-    @objc func mySkill(){
-//        self.navigationController?.pushViewController(MySkillViewController(), animated: true)
-    }
     //MARK:收件地址
     @objc func myaddr(){
         var d = ["UserID":UserID!] as [String : String]
@@ -224,20 +178,34 @@ class V3_PersonalInfoViewController: UIViewController,UIImagePickerControllerDel
                 if ss.userOfxgy.Avator != nil{
                     ss.iv_avatar.setImage(path: URL.init(string: "https://img.xigyu.com/Pics/Avator/\(ss.userOfxgy.Avator!)")!)
                 }
-                if ss.userOfxgy.TrueName==""{
-                    ss.lb_truename.text="未认证"
+                if ss.userOfxgy.IfAuth == "1"{
+                    ss.getmessageBytype()
                 }else{
-                    ss.lb_truename.text=ss.userOfxgy.TrueName
+                    ss.lb_companyName.text="未认证"
                 }
-                
                 ss.lb_phone.text=ss.userOfxgy.Phone
-                if ss.userOfxgy.emergencyContact==""{
-                    ss.lb_jjphone.text="未添加"
-                }else{
-                    ss.lb_jjphone.text=ss.userOfxgy.emergencyContact
-                }
-                
+                ss.lb_Name.text=ss.userOfxgy.NickName
             }
+        }){[weak self] (error) in
+            HUD.dismiss()
+            guard let ss = self else {return}
+        }
+    }
+    //MARK:获取公司信息
+    @objc func getmessageBytype(){
+        let d = ["UserID":UserID
+            ] as! [String : String]
+        AlamofireHelper.post(url: GetmessageBytype, parameters: d, successHandler: {[weak self](res)in
+            HUD.dismiss()
+            guard let ss = self else {return}
+            ss.lb_companyName.text=res["Data"]["Item2"]["CompanyName"].stringValue
+            ss.lb_license.text=res["Data"]["Item2"]["CompanyNum"].stringValue
+            let province=res["Data"]["Item2"]["Province"].stringValue
+            let city=res["Data"]["Item2"]["City"].stringValue
+            let area=res["Data"]["Item2"]["Area"].stringValue
+            let district=res["Data"]["Item2"]["District"].stringValue
+            let addr=res["Data"]["Item2"]["Address"].stringValue
+            ss.lb_addr.text="\(province)\(city)\(area)\(district)\(addr)"
         }){[weak self] (error) in
             HUD.dismiss()
             guard let ss = self else {return}

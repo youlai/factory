@@ -2,12 +2,13 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TypeViewController" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TypeViewController" customModule="factory" customModuleProvider="target">
             <connections>
                 <outlet property="iv_add" destination="35h-f0-WPt" id="fvz-ik-16B"/>
                 <outlet property="tableView" destination="TK1-um-apD" id="jJC-ze-PVm"/>
@@ -20,10 +21,6 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pMA-3X-W3v">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="t8o-We-FES">
                     <rect key="frame" x="0.0" y="44" width="414" height="60"/>
                     <subviews>
@@ -96,22 +93,15 @@
                 <constraint firstItem="EKX-w9-E9L" firstAttribute="trailing" secondItem="TK1-um-apD" secondAttribute="trailing" id="1aQ-3O-ZXu"/>
                 <constraint firstItem="2Aj-re-pDQ" firstAttribute="leading" secondItem="4Sm-zU-Xdb" secondAttribute="leading" constant="10" id="5hD-sS-9FY"/>
                 <constraint firstItem="zwO-sR-cRk" firstAttribute="centerX" secondItem="4Sm-zU-Xdb" secondAttribute="centerX" id="6BT-6r-9nH"/>
-                <constraint firstItem="d6i-TB-CsM" firstAttribute="centerY" secondItem="4Sm-zU-Xdb" secondAttribute="centerY" constant="-374" id="6aL-D3-wSm"/>
                 <constraint firstItem="RTD-7g-cyf" firstAttribute="bottom" secondItem="EKX-w9-E9L" secondAttribute="bottom" id="6vR-y6-eUx"/>
                 <constraint firstItem="t8o-We-FES" firstAttribute="trailing" secondItem="EKX-w9-E9L" secondAttribute="trailing" id="8T4-df-WpU"/>
-                <constraint firstItem="EKX-w9-E9L" firstAttribute="top" secondItem="pMA-3X-W3v" secondAttribute="bottom" id="Bdu-oZ-Lhd"/>
                 <constraint firstItem="RTD-7g-cyf" firstAttribute="centerX" secondItem="4Sm-zU-Xdb" secondAttribute="centerX" id="HUB-co-Vff"/>
                 <constraint firstItem="t8o-We-FES" firstAttribute="leading" secondItem="EKX-w9-E9L" secondAttribute="leading" id="IPk-JZ-jBH"/>
                 <constraint firstItem="RTD-7g-cyf" firstAttribute="top" secondItem="zwO-sR-cRk" secondAttribute="bottom" constant="8" id="Kco-2E-Jhp"/>
                 <constraint firstItem="2Aj-re-pDQ" firstAttribute="leading" secondItem="4Sm-zU-Xdb" secondAttribute="leading" constant="10" id="OCb-hM-zha"/>
-                <constraint firstItem="2Aj-re-pDQ" firstAttribute="centerY" secondItem="4Sm-zU-Xdb" secondAttribute="centerY" constant="-374" id="P7e-Em-tLV"/>
-                <constraint firstItem="2Aj-re-pDQ" firstAttribute="centerY" secondItem="4Sm-zU-Xdb" secondAttribute="centerY" constant="-374" id="TsY-1c-pxH"/>
                 <constraint firstItem="35h-f0-WPt" firstAttribute="top" secondItem="TK1-um-apD" secondAttribute="bottom" constant="10" id="WHr-Ck-Xr6"/>
                 <constraint firstItem="zwO-sR-cRk" firstAttribute="top" secondItem="35h-f0-WPt" secondAttribute="bottom" constant="10" id="WOt-t6-Qbd"/>
-                <constraint firstItem="pMA-3X-W3v" firstAttribute="top" secondItem="4Sm-zU-Xdb" secondAttribute="top" id="Yj0-qJ-Toh"/>
-                <constraint firstItem="pMA-3X-W3v" firstAttribute="leading" secondItem="4Sm-zU-Xdb" secondAttribute="leading" id="ajr-Nk-qMp"/>
-                <constraint firstAttribute="trailing" secondItem="pMA-3X-W3v" secondAttribute="trailing" id="erH-DC-p0j"/>
-                <constraint firstItem="t8o-We-FES" firstAttribute="top" secondItem="pMA-3X-W3v" secondAttribute="bottom" id="qGl-M3-37i"/>
+                <constraint firstItem="t8o-We-FES" firstAttribute="top" secondItem="EKX-w9-E9L" secondAttribute="top" id="jtZ-Fs-yhk"/>
                 <constraint firstItem="d6i-TB-CsM" firstAttribute="centerX" secondItem="4Sm-zU-Xdb" secondAttribute="centerX" id="tal-Uq-YmO"/>
                 <constraint firstItem="35h-f0-WPt" firstAttribute="centerX" secondItem="4Sm-zU-Xdb" secondAttribute="centerX" id="xUw-s6-fvf"/>
                 <constraint firstItem="TK1-um-apD" firstAttribute="leading" secondItem="EKX-w9-E9L" secondAttribute="leading" id="ylq-BP-8Ik"/>

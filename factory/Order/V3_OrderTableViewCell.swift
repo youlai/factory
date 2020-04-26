@@ -9,14 +9,14 @@
 import UIKit
 
 class V3_OrderTableViewCell: UITableViewCell {
+    @IBOutlet weak var iv_star: UIImageView!
+    @IBOutlet weak var iv_copy: UIImageView!
+    @IBOutlet weak var lb_orderid: UILabel!
     @IBOutlet weak var lb_time: UILabel!
     @IBOutlet weak var lb_status: UILabelPadding!
-    @IBOutlet weak var lb_distance: UILabel!
     @IBOutlet weak var lb_content: UILabel!
     @IBOutlet weak var lb_memo: UILabel!
     @IBOutlet weak var lb_addr: UILabel!
-    @IBOutlet weak var btn_join: UIButton!
-    @IBOutlet weak var iv_pos: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

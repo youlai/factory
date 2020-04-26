@@ -37,11 +37,12 @@ class V3_MineViewController: UIViewController{
         uv_wallet.addOnClickListener(target: self, action: #selector(mywallet))
         uv_brand.addOnClickListener(target: self, action: #selector(addBrand))
         uv_type.addOnClickListener(target: self, action: #selector(addType))
-        uv_mingxi.addOnClickListener(target: self, action: #selector(info))
+        uv_mingxi.addOnClickListener(target: self, action: #selector(toMingxi))
         uv_feedback.addOnClickListener(target: self, action: #selector(feedback))
         uv_service.addOnClickListener(target: self, action: #selector(callphone))
         uv_aboutus.addOnClickListener(target: self, action: #selector(aboutus))
         uv_setting.addOnClickListener(target: self, action: #selector(setting))
+        btn_recharge.addOnClickListener(target: self, action: #selector(toRecharge))
         buttonStyle(btn: btn_recharge)
         //refresh
         let header = TTRefreshHeader.init(refreshingBlock: {[weak self] in
@@ -55,7 +56,7 @@ class V3_MineViewController: UIViewController{
     }
     //MARK:按钮样式
     func buttonStyle(btn:UIButton){
-        btn.border(color: UIColor.red, width: 1, type: UIBorderSideType.UIBorderSideTypeAll, cornerRadius: 5)
+        btn.border(color: UIColor.lightGray, width: 0.5, type: UIBorderSideType.UIBorderSideTypeAll, cornerRadius: 3)
         btn.setTitleColor(UIColor.black, for: UIControl.State.normal)
         btn.contentEdgeInsets=UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         btn.snp.makeConstraints{(mask) in
@@ -70,9 +71,13 @@ class V3_MineViewController: UIViewController{
     @objc func info(){
         self.tabBarController?.navigationController?.pushViewController(V3_PersonalInfoViewController(), animated: true)
     }
+    //MARK:充值
+    @objc func toRecharge(){
+        self.tabBarController?.navigationController?.pushViewController(RechargeViewController(), animated: true)
+    }
     //MARK:我的钱包
     @objc func mywallet(){
-        self.tabBarController?.navigationController?.pushViewController(V3_WalletViewController(), animated: true)
+        self.tabBarController?.navigationController?.pushViewController(F_WalletViewController(), animated: true)
     }
     //MARK:添加品牌
     @objc func addBrand(){
@@ -85,6 +90,10 @@ class V3_MineViewController: UIViewController{
     //MARK:意见反馈
     @objc func feedback(){
         self.tabBarController?.navigationController?.pushViewController(FeedbackViewController(), animated: true)
+    }
+    //MARK:消费明细
+    @objc func toMingxi(){
+        self.navigationController?.pushViewController(RechargeRecordViewController(State: "2"), animated: true)
     }
     //MARK:客服电话
     @objc func callphone(){
@@ -116,8 +125,38 @@ class V3_MineViewController: UIViewController{
             if ss.userOfxgy.Avator != nil{
                 ss.iv_avatar.setImage(path: URL.init(string: "https://img.xigyu.com/Pics/Avator/\(ss.userOfxgy.Avator!)")!)
             }
-            ss.lb_name.text = ss.userOfxgy.TrueName
-            ss.lb_count.text = "已发工单数：\(ss.userOfxgy.ServiceTotalOrderNum)"
+            ss.getmessageBytype()
+            ss.getUserOrderNum()
+        }){[weak self] (error) in
+            HUD.dismiss()
+            guard let ss = self else {return}
+        }
+    }
+    //MARK:获取公司信息
+    @objc func getmessageBytype(){
+        let d = ["UserID":UserID
+            ] as! [String : String]
+        AlamofireHelper.post(url: GetmessageBytype, parameters: d, successHandler: {[weak self](res)in
+            HUD.dismiss()
+            guard let ss = self else {return}
+            if res["Data"]["Item1"].boolValue{
+                ss.lb_name.text=res["Data"]["Item2"]["CompanyName"].stringValue
+            }else{
+               ss.lb_name.text="未认证"
+            }
+        }){[weak self] (error) in
+            HUD.dismiss()
+            guard let ss = self else {return}
+        }
+    }
+    //MARK:获取已发工单数量
+    @objc func getUserOrderNum(){
+        let d = ["UserID":UserID
+            ] as! [String : String]
+        AlamofireHelper.post(url: GetUserOrderNum, parameters: d, successHandler: {[weak self](res)in
+            HUD.dismiss()
+            guard let ss = self else {return}
+            ss.lb_count.text="已发工单数：\(res["Data"]["count"].stringValue)"
         }){[weak self] (error) in
             HUD.dismiss()
             guard let ss = self else {return}

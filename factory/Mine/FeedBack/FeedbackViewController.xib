@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FeedbackViewController" customModule="MasterWorker" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FeedbackViewController" customModule="factory" customModuleProvider="target">
             <connections>
                 <outlet property="btn_countType" destination="aad-ef-P5S" id="yU4-Mw-1hF"/>
                 <outlet property="btn_otherType" destination="Yf7-iD-E8A" id="LE7-YG-vNW"/>
@@ -26,7 +26,7 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Khw-vb-SHz">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                    <color key="backgroundColor" red="0.074509803920000006" green="0.78823529410000004" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <viewLayoutGuide key="safeArea" id="Gll-KC-ne2"/>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qu6-hW-Q7W">
@@ -35,7 +35,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="32v-pk-fMP">
                             <rect key="frame" x="10" y="5" width="40" height="40"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_actionbar_return" translatesAutoresizingMaskIntoConstraints="NO" id="Buo-LF-d8s">
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="back" translatesAutoresizingMaskIntoConstraints="NO" id="Buo-LF-d8s">
                                     <rect key="frame" x="10" y="10" width="20" height="20"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="20" id="7Y7-jX-7gp"/>
@@ -43,7 +43,7 @@
                                     </constraints>
                                 </imageView>
                             </subviews>
-                            <color key="backgroundColor" red="0.074509803920000006" green="0.78823529410000004" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="40" id="Sge-yj-qrl"/>
                                 <constraint firstAttribute="height" constant="40" id="azv-IL-Xev"/>
@@ -58,7 +58,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
-                    <color key="backgroundColor" red="0.074509803920000006" green="0.78823529410000004" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="50" id="0WH-pn-lVh"/>
                         <constraint firstItem="32v-pk-fMP" firstAttribute="centerY" secondItem="Qu6-hW-Q7W" secondAttribute="centerY" id="FHc-oo-Q7q"/>
@@ -98,7 +98,7 @@
                             </subviews>
                         </stackView>
                     </subviews>
-                    <color key="backgroundColor" red="0.074509803920000006" green="0.78823529410000004" blue="0.91764705879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="p86-rf-6ov" firstAttribute="centerX" secondItem="hFI-Kb-MOd" secondAttribute="centerX" id="BOx-WB-Txg"/>
                         <constraint firstAttribute="bottom" secondItem="p86-rf-6ov" secondAttribute="bottom" constant="20" id="Cwe-pQ-Wnb"/>
@@ -157,6 +157,6 @@
         </view>
     </objects>
     <resources>
-        <image name="icon_actionbar_return" width="40" height="77"/>
+        <image name="back" width="200" height="200"/>
     </resources>
 </document>
