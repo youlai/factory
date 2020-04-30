@@ -1531,7 +1531,7 @@
 				CODE_SIGN_ENTITLEMENTS = factory/factory.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DQW5625LLJ;
 				INFOPLIST_FILE = factory/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1539,6 +1539,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhkj.factory;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "发布证书";
@@ -1556,7 +1557,7 @@
 				CODE_SIGN_ENTITLEMENTS = factory/factory.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DQW5625LLJ;
 				INFOPLIST_FILE = factory/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -1564,6 +1565,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhkj.factory;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "发布证书";

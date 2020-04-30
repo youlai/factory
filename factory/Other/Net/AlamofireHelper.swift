@@ -48,6 +48,11 @@ class AlamofireHelper: NSObject {
                     case .success(let value):
                         let jsonData = JSON.init(value as Any)
                         print(jsonData)
+                        if jsonData["StatusCode"].intValue == 406{
+                            //MARK:发送通知
+                            NotificationCenter.default.post(name: NSNotification.Name("406"), object: nil)
+                            return
+                        }
                         if let success = successHandler {
                             success(jsonData);
                         }

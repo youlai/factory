@@ -429,8 +429,8 @@ class Repair_SendOrderViewController: UIViewController,LBXScanViewControllerDele
             "BrandName":brand.FBrandName!,
             "CategoryID":type.CategoryID,
             "CategoryName":type.CategoryName!,
-            "SubCategoryID":type.CategoryID,
-            "SubCategoryName":type.CategoryName!,
+            "SubCategoryID":type.SubCategoryID,
+            "SubCategoryName":type.SubCategoryName!,
             "ProductTypeID":type.ProductTypeID, //三级
             "ProductType":type.ProductTypeName!,
             "ProvinceCode":provinceCode!,

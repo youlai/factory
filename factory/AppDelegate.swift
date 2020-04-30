@@ -13,7 +13,28 @@ import IQKeyboardManagerSwift
 class AppDelegate: UIResponder, UIApplicationDelegate{
     
     var window: UIWindow?
-    
+    @objc func addAndUpdatePushAccount(){
+        let d = ["UserID":UserID,
+                 "token":pushToken==nil ? "" : pushToken,
+                 "type":"6",
+                 "platform":"iOS"
+            ] as! [String : String]
+        AlamofireHelper.post(url: AddAndUpdatePushAccount, parameters: d, successHandler: {[weak self](res)in
+            HUD.dismiss()
+            guard let ss = self else {return}
+            
+            let nav=UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "nav") as! UINavigationController
+                        nav.setNavigationBarHidden(true, animated: true)
+            //            nav.addChild(RootTabBarViewController())
+                        nav.pushViewController(UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tab"), animated: true)
+            ss.window?.rootViewController=nav
+                        ss.window!.tintColor = UIColor.red
+            
+        }){[weak self] (error) in
+            HUD.dismiss()
+            guard let ss = self else {return}
+        }
+    }
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         
@@ -22,12 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         if UserID==nil{
             
         }else{
-            let nav=UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "nav") as! UINavigationController
-            nav.setNavigationBarHidden(true, animated: true)
-//            nav.addChild(RootTabBarViewController())
-            nav.pushViewController(UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "tab"), animated: true)
-            window?.rootViewController=nav
-            self.window!.tintColor = UIColor.red
+            addAndUpdatePushAccount()
         }
         
         _ = WXApi.registerApp("wxbaf9ee1d21a481af")//appid字符串
@@ -224,4 +240,5 @@ extension AppDelegate : JPUSHRegisterDelegate {
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) { //可选
         print("did Fail To Register For Remote Notifications With Error: \(error)")
     }
+    
 }
