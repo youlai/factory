@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyCardViewController" customModule="MasterWorker" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MyCardViewController" customModule="factory" customModuleProvider="target">
             <connections>
                 <outlet property="lb_add" destination="yhF-Ad-OGm" id="Gdi-uj-p2b"/>
                 <outlet property="tableView" destination="kxe-Gi-MZK" id="qIi-hM-Hb8"/>
@@ -54,8 +54,11 @@
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="添加" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yhF-Ad-OGm">
-                            <rect key="frame" x="351" y="20.5" width="33" height="19.5"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="添加" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yhF-Ad-OGm">
+                            <rect key="frame" x="334" y="0.0" width="80" height="60"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="80" id="9YL-qM-jiN"/>
+                            </constraints>
                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
@@ -68,7 +71,9 @@
                         <constraint firstItem="32v-pk-fMP" firstAttribute="leading" secondItem="gQT-sq-7vv" secondAttribute="leading" id="Foe-7d-ZMb"/>
                         <constraint firstItem="yhF-Ad-OGm" firstAttribute="centerY" secondItem="Qu6-hW-Q7W" secondAttribute="centerY" id="LEJ-dK-tkD"/>
                         <constraint firstItem="I86-QN-LPz" firstAttribute="centerY" secondItem="32v-pk-fMP" secondAttribute="centerY" id="V2J-fd-bNO"/>
-                        <constraint firstItem="gQT-sq-7vv" firstAttribute="trailing" secondItem="yhF-Ad-OGm" secondAttribute="trailing" constant="30" id="s4L-lI-Jbh"/>
+                        <constraint firstItem="gQT-sq-7vv" firstAttribute="bottom" secondItem="yhF-Ad-OGm" secondAttribute="bottom" id="jB0-5C-3Lq"/>
+                        <constraint firstItem="gQT-sq-7vv" firstAttribute="trailing" secondItem="yhF-Ad-OGm" secondAttribute="trailing" id="s4L-lI-Jbh"/>
+                        <constraint firstItem="yhF-Ad-OGm" firstAttribute="top" secondItem="gQT-sq-7vv" secondAttribute="top" id="u7A-rb-jAf"/>
                         <constraint firstItem="I86-QN-LPz" firstAttribute="centerX" secondItem="Qu6-hW-Q7W" secondAttribute="centerX" id="xuu-qu-dsh"/>
                     </constraints>
                     <viewLayoutGuide key="safeArea" id="gQT-sq-7vv"/>
@@ -101,6 +106,6 @@
         </view>
     </objects>
     <resources>
-        <image name="left_arrow" width="29.333333969116211" height="54.666667938232422"/>
+        <image name="left_arrow" width="88" height="164"/>
     </resources>
 </document>

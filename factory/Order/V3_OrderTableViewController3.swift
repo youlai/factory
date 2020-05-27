@@ -71,11 +71,11 @@ class V3_OrderTableViewController3: UIViewController,UITableViewDelegate,UITable
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-//    "急需处理", "待完成", "星标工单"11, "已完成", "质保单"4, "退单处理","所有工单"5
-//    "远程费审核"9,"配件审核"1,"待寄件"10,"留言"15
-//    "30日内"16,"30日以上"17
-//    "待支付"2,"已支付"3
-//    "取消工单"13,"关闭工单"12
+    //    "急需处理", "待完成", "星标工单"11, "已完成", "质保单"4, "退单处理","所有工单"5
+    //    "远程费审核"9,"配件审核"1,"待寄件"10,"留言"15
+    //    "30日内"16,"30日以上"17
+    //    "待支付"2,"已支付"3
+    //    "取消工单"13,"关闭工单"12
     @objc func loadData(){
         let d = ["UserID":UserID!,
                  "State":"\(orderStatus ?? 1)",
@@ -150,9 +150,18 @@ class V3_OrderTableViewController3: UIViewController,UITableViewDelegate,UITable
     }
     //MARK:复制
     @objc func copy_orderid(sender:UITapGestureRecognizer!){
+        //        下单厂家：慈溪市夫鹅电器厂
+        //        工单号：2000005288
+        //        下单时间：2020-04-30T17:17:44
+        //        用户信息：李妍 15940030802
+        //        用户地址：辽宁省沈阳市沈河区大西街道小西路友爱东巷18-1号友爱里住宅1号楼4单元701（不进小区道边第二个门洞）
+        //        产品信息：全自动波轮洗衣机
+        //        售后类型：厂家保内
+        //        服务类型：上门维修
         let past = UIPasteboard.general
+        let order=self.dataSouce[sender.view!.tag]
         
-        past.string = "\(self.dataSouce[sender.view!.tag].OrderID)"
+        past.string = "下单厂家：\(order.InvoiceName!)\n工单号：\(order.OrderID)\n下单时间：\(order.CreateDate!)\n用户信息：\(order.UserName!) \(order.Phone!)\n用户地址：\(order.Address!)\n产品信息：\(order.ProductType!)\n售后类型：\(order.GuaranteeStr!)\n服务类型：\(order.TypeName!)"
         
         HUD.showText(past.string!)
     }
@@ -166,17 +175,17 @@ class V3_OrderTableViewController3: UIViewController,UITableViewDelegate,UITable
             FStarOrder="Y"
         }
         let orderid = "\(order.OrderID)"
-            let d = ["OrderID":orderid,
-                     "FStarOrder":FStarOrder
-                ] as! [String : String]
-            AlamofireHelper.post(url: GetFStarOrder, parameters: d, successHandler: {[weak self](res)in
-                HUD.dismiss()
-                guard let ss = self else {return}
-                ss.loadData()
-            }){[weak self] (error) in
-                HUD.dismiss()
-                guard let ss = self else {return}
-            }
+        let d = ["OrderID":orderid,
+                 "FStarOrder":FStarOrder
+            ] as! [String : String]
+        AlamofireHelper.post(url: GetFStarOrder, parameters: d, successHandler: {[weak self](res)in
+            HUD.dismiss()
+            guard let ss = self else {return}
+            ss.loadData()
+        }){[weak self] (error) in
+            HUD.dismiss()
+            guard let ss = self else {return}
+        }
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.navigationController?.pushViewController(XgyOrderDetailViewController(OrderID: "\(dataSouce[indexPath.row].OrderID)"), animated: true)

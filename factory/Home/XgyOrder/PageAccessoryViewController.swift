@@ -414,9 +414,10 @@ extension PageAccessoryViewController{
         }
         let d = [
             "OrderID":OrderID,
-            "ExpressNo":expressno!
+            "ExpressNo":expressno!,
+            "SendState":"Y"
             ]as[String:String]
-        AlamofireHelper.post(url: AddOrUpdateExpressNo, parameters: d, successHandler: {[weak self](res)in
+        AlamofireHelper.post(url: NewAddOrUpdateExpressNo, parameters: d, successHandler: {[weak self](res)in
             HUD.dismiss()
             guard let ss = self else {return}
             if res["Data"]["Item1"].boolValue{

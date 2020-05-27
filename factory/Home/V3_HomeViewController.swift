@@ -78,6 +78,9 @@ class V3_HomeViewController: UIViewController,YLSinglerViewDelegate{
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        VersionManager.init(appleId: "1509650055",auto: true)
+        
         iv_avator.layer.cornerRadius=20
         messgIsOrNo()
         getUserInfoList()

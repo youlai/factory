@@ -297,6 +297,7 @@ struct mOrder {
     var LoginUser: String?
     var FStarOrder: String?
     var AccessoryAndServiceApplyState: String?
+    var InvoiceName: String?
     
     init(json: JSON) {
         SendOrderList = json["SendOrderList"].arrayValue.compactMap({ mSendOrderList(json: $0)})
@@ -304,6 +305,7 @@ struct mOrder {
         Id = json["Id"].intValue
         QuaMoney = json["QuaMoney"].intValue
         Accessory = json["Accessory"].stringValue
+        InvoiceName = json["InvoiceName"].stringValue
         AppraiseDate = json["AppraiseDate"].stringValue
         FactoryComplaint = json["FactoryComplaint"].stringValue
         EndRemark = json["EndRemark"].stringValue

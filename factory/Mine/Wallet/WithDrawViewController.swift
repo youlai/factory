@@ -22,6 +22,7 @@ class WithDrawViewController: UIViewController {
     @IBOutlet weak var btn_withdraw: UIButton!
     var money:String! //金额
     var CardNo="" //卡号
+    var PayName="" //开户名
     var userOfxgy:UserOfxgy!
     override func viewDidLayoutSubviews() {
         let gradientLayer = CAGradientLayer().rainbowLayer()
@@ -67,6 +68,7 @@ class WithDrawViewController: UIViewController {
         lb_bankname.text=card.PayInfoName
         lb_cardno.text="尾号\(card.PayNo!.suffix(4))"
         CardNo=card.PayNo!
+        PayName=card.PayName!
         switch card.PayInfoName {
         case "光大银行":
             iv_bankicon.image=UIImage(named: "guangda")
@@ -127,7 +129,8 @@ class WithDrawViewController: UIViewController {
         }
         let d = ["UserID":UserID!,
                  "DrawMoney":money!,
-                 "CardNo":CardNo
+                 "CardNo":CardNo,
+            "CardName":PayName
             ] as [String : Any]
         print(d)
         AlamofireHelper.post(url: WithDrawDeposit, parameters: d, successHandler: {[weak self](res)in
@@ -135,6 +138,8 @@ class WithDrawViewController: UIViewController {
             guard let ss = self else {return}
             if res["Data"]["Item1"].boolValue{
                 HUD.showText(res["Data"]["Item2"].stringValue)
+                //MARK:发送通知
+                NotificationCenter.default.post(name: NSNotification.Name("提现成功"), object: nil)
                 ss.navigationController?.popViewController(animated: true)
             }
         }){[weak self] (error) in

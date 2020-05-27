@@ -39,8 +39,7 @@ class MyCardViewController: UIViewController,UITableViewDelegate,UITableViewData
         NotificationCenter.default
             .addObserver(self, selector: #selector(updateCard(notification:)), name: NSNotification.Name("updateCard"), object: nil)
         
-        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
-        tableView.addGestureRecognizer(longPressRecognizer)
+        
     }
     @objc func longPressed(sender: UILongPressGestureRecognizer) {
         
@@ -189,6 +188,8 @@ class MyCardViewController: UIViewController,UITableViewDelegate,UITableViewData
         cell.uv_cell.layer.cornerRadius=10
         
         cell.selectionStyle = .none
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed(sender:)))
+        cell.addGestureRecognizer(longPressRecognizer)
         return cell
     }
     /*分区头部部高度*/
@@ -245,6 +246,7 @@ class MyCardViewController: UIViewController,UITableViewDelegate,UITableViewData
 struct MyCard {
     var page: Int = 0
     var PayInfoName: String?
+    var PayName: String?
     var limit: Int = 0
     var IsUse: String?
     var Version: Int = 0
@@ -257,6 +259,7 @@ struct MyCard {
     init(json: JSON) {
         page = json["page"].intValue
         PayInfoName = json["PayInfoName"].stringValue
+        PayName = json["PayName"].stringValue
         limit = json["limit"].intValue
         IsUse = json["IsUse"].stringValue
         Version = json["Version"].intValue

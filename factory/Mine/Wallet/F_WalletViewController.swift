@@ -56,6 +56,7 @@ class F_WalletViewController: UIViewController {
 //        CAGradientLayer:0x11651e0a0; position = CGPoint (207 189); bounds = CGRect (0 0; 394 150); allowsGroupOpacity = YES; endPoint = CGPoint (1 0); startPoint = CGPoint (0 0);
         //MARK:接收支付宝支付通知
         NotificationCenter.default.addObserver(self, selector: #selector(getUserInfoList), name: NSNotification.Name("recharge"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(getUserInfoList), name: NSNotification.Name("提现成功"), object: nil)
     }
     //MARK:阴影圆角
     @objc func shadow(view:UIView){

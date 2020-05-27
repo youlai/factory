@@ -8,7 +8,7 @@
 
 class VersionManager: NSObject {
     
-    init(appleId: String) {
+    init(appleId: String,auto:Bool) {
         
         super.init()
         
@@ -18,6 +18,10 @@ class VersionManager: NSObject {
         
         let appMsg = try? String.init(contentsOf: appUrl!, encoding: .utf8)
         if appMsg == nil{
+            if auto {
+                print("已经是最新版本！")
+                return
+            }
             HUD.showText("已经是最新版本!")
             return
         }
@@ -54,7 +58,7 @@ class VersionManager: NSObject {
         
         // appstore上的版本号大于本地版本号 - 说明有更新
         
-        if appStoreVersion_Float != localVersion_Float && !res {
+        if appStoreVersion_Float > localVersion_Float && !res {
             
             let alertC = UIAlertController.init(title: "版本更新了",
                                                 
@@ -90,13 +94,17 @@ class VersionManager: NSObject {
             
             alertC.addAction(yesAction)
             
-            alertC.addAction(noAction)
-            
-            alertC.addAction(cancelAction)
+//            alertC.addAction(noAction)
+//
+//            alertC.addAction(cancelAction)
             
             UIApplication.shared.keyWindow?.rootViewController?.present(alertC, animated: true, completion: nil)
             
         }else{
+            if auto {
+                print("已经是最新版本！")
+                return
+            }
             HUD.showText("已经是最新版本!")
         }
         

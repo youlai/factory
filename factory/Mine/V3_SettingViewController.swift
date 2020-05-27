@@ -71,7 +71,7 @@ class V3_SettingViewController: UIViewController {
     }
     //MARK:检查更新
     @objc func update(){
-        VersionManager.init(appleId: "1509650055")
+        VersionManager.init(appleId: "1509650055",auto: false)
     }
     //MARK:退出账号
     @objc func logout(){

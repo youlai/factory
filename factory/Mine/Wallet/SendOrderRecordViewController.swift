@@ -222,9 +222,18 @@ class SendOrderRecordViewController: UIViewController ,UITableViewDelegate,UITab
     }
     //MARK:复制
     @objc func copy_orderid(sender:UITapGestureRecognizer!){
+        //        下单厂家：慈溪市夫鹅电器厂
+        //        工单号：2000005288
+        //        下单时间：2020-04-30T17:17:44
+        //        用户信息：李妍 15940030802
+        //        用户地址：辽宁省沈阳市沈河区大西街道小西路友爱东巷18-1号友爱里住宅1号楼4单元701（不进小区道边第二个门洞）
+        //        产品信息：全自动波轮洗衣机
+        //        售后类型：厂家保内
+        //        服务类型：上门维修
         let past = UIPasteboard.general
+        let order=self.dataSouce[sender.view!.tag]
         
-        past.string = "\(self.dataSouce[sender.view!.tag].OrderID)"
+        past.string = "下单厂家：\(order.InvoiceName!)\n工单号：\(order.OrderID)\n下单时间：\(order.CreateDate!)\n用户信息：\(order.UserName!) \(order.Phone!)\n用户地址：\(order.Address!)\n产品信息：\(order.ProductType!)\n售后类型：\(order.GuaranteeStr!)\n服务类型：\(order.TypeName!)"
         
         HUD.showText(past.string!)
     }
