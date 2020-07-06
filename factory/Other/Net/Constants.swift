@@ -111,7 +111,7 @@ let AddBrandCategory=BASE_URL2+"FactoryConfig/AddBrandCategory"//MARK:添加型�
 let DeleteFactoryBrand=BASE_URL2+"FactoryConfig/DeleteFactoryBrand"//MARK:删除品牌
 let GetBrandWithCategory=BASE_URL2+"FactoryConfig/GetBrandWithCategory"//MARK:获取产品型号
 let DeleteBrandcategory=BASE_URL2+"FactoryConfig/DeleteBrandcategory"//MARK:删除产品型号
-let AddOrder=BASE_URL2+"Order/AddOrder"//MARK:发单
+let AddOrder=BASE_URL2+"OrderNew/AddOrder"//MARK:发单
 let ConfirmReceipt=BASE_URL2+"Order/ConfirmReceipt"//MARK:确认收货
 let FactoryGetOrderList=BASE_URL2+"Order/FactoryGetOrderList"//MARK:获取服务工单列表
 let GetFStarOrder=BASE_URL2+"Order/GetFStarOrder"//MARK:星标工单
@@ -200,6 +200,14 @@ let AddOrUpdatemessage=BASE_URL2+"Cms/AddOrUpdatemessage"//MARK:更新消息为�
 let GetNewsLeaveMessage=BASE_URL2+"LeaveMessage/GetNewsLeaveMessage"//MARK:留言消息
 let GetListCategoryContentByCategoryID=BASE_URL2+"Cms/GetListCategoryContentByCategoryID"//MARK:CategoryID 7系统消息 8平台政策 9平台新闻 10接单必读
 let AddLeaveMessageForOrder=BASE_URL2+"LeaveMessage/AddLeaveMessageForOrder"//MARK:添加工单留言
+
+let GetFactoryProd=BASE_URL2+"OrderNew/GetFactoryProd"//MARK:获取工单的前五个地址
+let GetProdCategory=BASE_URL2+"OrderNew/GetProdCategory"//MARK:加载产品类别
+let GetSingleProd=BASE_URL2+"OrderNew/GetSingleProd"//MARK:获取单个产品
+let GetProdSpecifications=BASE_URL2+"OrderNew/GetProdSpecifications"//MARK:加载产品规格
+let GetProdModel=BASE_URL2+"OrderNew/GetProdModel"//MARK:加载产品型号
+let AddBrand=BASE_URL2+"OrderNew/AddBrand"//MARK:添加品牌
+let AddProdModel=BASE_URL2+"OrderNew/AddProdModel"//MARK:添加型号
 //===================================商城接口===============================================
 let Get = BASE_URL+"api/home/Get"//首页
 let home_json=BASE_URL+"AppHome/data/default.json"//首页

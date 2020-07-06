@@ -244,6 +244,14 @@
 		18D93B8C2429FD840046F87A /* BindPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18D93B822429FD820046F87A /* BindPhoneViewController.swift */; };
 		18D93B8E2429FD840046F87A /* CodeLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18D93B842429FD830046F87A /* CodeLoginViewController.xib */; };
 		18D93B8F2429FD840046F87A /* BindPhoneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18D93B852429FD840046F87A /* BindPhoneViewController.xib */; };
+		18E1404524AF15E1008CEFBC /* ChooseCommonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E1404324AF15E1008CEFBC /* ChooseCommonView.swift */; };
+		18E1404624AF1A72008CEFBC /* ChooseCommonView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E1404424AF15E1008CEFBC /* ChooseCommonView.xib */; };
+		18E1404924AF1A90008CEFBC /* ChooseProdCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E1404724AF1A8F008CEFBC /* ChooseProdCategoryView.swift */; };
+		18E1404A24AF1AD1008CEFBC /* ChooseProdCategoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E1404824AF1A8F008CEFBC /* ChooseProdCategoryView.xib */; };
+		18E1404D24AF1B05008CEFBC /* ChooseProdSpecificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E1404B24AF1B05008CEFBC /* ChooseProdSpecificationsView.swift */; };
+		18E1404E24AF1B3E008CEFBC /* ChooseProdSpecificationsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E1404C24AF1B05008CEFBC /* ChooseProdSpecificationsView.xib */; };
+		18E1405124AF1B7F008CEFBC /* ChooseProdModelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E1405024AF1B7F008CEFBC /* ChooseProdModelView.swift */; };
+		18E1405224AF1BC1008CEFBC /* ChooseProdModelView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18E1404F24AF1B7E008CEFBC /* ChooseProdModelView.xib */; };
 		4B119441BDFCC1E32FB2A4E6 /* Pods_factory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC57B2AF18CD55FAB4A24CB9 /* Pods_factory.framework */; };
 /* End PBXBuildFile section */
 
@@ -321,7 +329,7 @@
 		18AF39D224458D66001467BC /* MarginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarginView.swift; sourceTree = "<group>"; };
 		18AF39D424458D7C001467BC /* MarginView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MarginView.xib; sourceTree = "<group>"; };
 		18B5D23A243188820002D923 /* Repair_SendOrderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Repair_SendOrderViewController.xib; sourceTree = "<group>"; };
-		18B5D23C243188980002D923 /* Repair_SendOrderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Repair_SendOrderViewController.swift; sourceTree = "<group>"; };
+		18B5D23C243188980002D923 /* Repair_SendOrderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Repair_SendOrderViewController.swift; sourceTree = "<group>"; wrapsLines = 1; };
 		18B5D23E2431DDCD0002D923 /* ChooseAccessoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseAccessoryView.swift; sourceTree = "<group>"; };
 		18B5D23F2431DDCE0002D923 /* AccessoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessoryCell.swift; sourceTree = "<group>"; };
 		18B5D2402431DDD00002D923 /* AccessoryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AccessoryCell.xib; sourceTree = "<group>"; };
@@ -489,6 +497,14 @@
 		18D93B822429FD820046F87A /* BindPhoneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BindPhoneViewController.swift; sourceTree = "<group>"; };
 		18D93B842429FD830046F87A /* CodeLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CodeLoginViewController.xib; sourceTree = "<group>"; };
 		18D93B852429FD840046F87A /* BindPhoneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BindPhoneViewController.xib; sourceTree = "<group>"; };
+		18E1404324AF15E1008CEFBC /* ChooseCommonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseCommonView.swift; sourceTree = "<group>"; };
+		18E1404424AF15E1008CEFBC /* ChooseCommonView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChooseCommonView.xib; sourceTree = "<group>"; };
+		18E1404724AF1A8F008CEFBC /* ChooseProdCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseProdCategoryView.swift; sourceTree = "<group>"; };
+		18E1404824AF1A8F008CEFBC /* ChooseProdCategoryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChooseProdCategoryView.xib; sourceTree = "<group>"; };
+		18E1404B24AF1B05008CEFBC /* ChooseProdSpecificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseProdSpecificationsView.swift; sourceTree = "<group>"; };
+		18E1404C24AF1B05008CEFBC /* ChooseProdSpecificationsView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChooseProdSpecificationsView.xib; sourceTree = "<group>"; };
+		18E1404F24AF1B7E008CEFBC /* ChooseProdModelView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChooseProdModelView.xib; sourceTree = "<group>"; };
+		18E1405024AF1B7F008CEFBC /* ChooseProdModelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseProdModelView.swift; sourceTree = "<group>"; };
 		19946A63853C12D34CBBA179 /* Pods-factory.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-factory.release.xcconfig"; path = "Pods/Target Support Files/Pods-factory/Pods-factory.release.xcconfig"; sourceTree = "<group>"; };
 		7E5E76BB64684F5E8E2E7F2F /* Pods-factory.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-factory.debug.xcconfig"; path = "Pods/Target Support Files/Pods-factory/Pods-factory.debug.xcconfig"; sourceTree = "<group>"; };
 		BC57B2AF18CD55FAB4A24CB9 /* Pods_factory.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_factory.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -729,6 +745,14 @@
 				18CCB6CC242CA58900F06CB1 /* CateOfxgy.swift */,
 				18CCB6CD242CA58900F06CB1 /* ChooseBrandView.swift */,
 				18CCB6CE242CA58900F06CB1 /* ChooseBrandView.xib */,
+				18E1404324AF15E1008CEFBC /* ChooseCommonView.swift */,
+				18E1404424AF15E1008CEFBC /* ChooseCommonView.xib */,
+				18E1404724AF1A8F008CEFBC /* ChooseProdCategoryView.swift */,
+				18E1404824AF1A8F008CEFBC /* ChooseProdCategoryView.xib */,
+				18E1404B24AF1B05008CEFBC /* ChooseProdSpecificationsView.swift */,
+				18E1404C24AF1B05008CEFBC /* ChooseProdSpecificationsView.xib */,
+				18E1405024AF1B7F008CEFBC /* ChooseProdModelView.swift */,
+				18E1404F24AF1B7E008CEFBC /* ChooseProdModelView.xib */,
 				18CCB6CF242CA58900F06CB1 /* ChooseCateView.swift */,
 				18CCB6D0242CA58900F06CB1 /* ChooseCateView.xib */,
 				18CCB6D1242CA58900F06CB1 /* ChooseTimeView.swift */,
@@ -1047,6 +1071,7 @@
 				18CCB6FC242CA58A00F06CB1 /* ChooseCateView.xib in Resources */,
 				18D3BC6E24342AA000EA4F70 /* V3_PersonalInfoViewController.xib in Resources */,
 				18D93B7A2429FBF70046F87A /* UIWebViewViewController.xib in Resources */,
+				18E1404624AF1A72008CEFBC /* ChooseCommonView.xib in Resources */,
 				18D93B892429FD840046F87A /* ForgetPwdViewController.xib in Resources */,
 				189329AB2331E90B0009BBB3 /* success@2x.png in Resources */,
 				18B9D8F9244463EB005E440F /* MessageViewController.xib in Resources */,
@@ -1064,6 +1089,7 @@
 				18CCB713242CA58A00F06CB1 /* PageBeyondViewController.xib in Resources */,
 				18CCB6FE242CA58A00F06CB1 /* ChooseTimeView.xib in Resources */,
 				18CCB749242CAC9300F06CB1 /* AddressViewController.xib in Resources */,
+				18E1404E24AF1B3E008CEFBC /* ChooseProdSpecificationsView.xib in Resources */,
 				18D3BC9A243492F500EA4F70 /* TypeTableViewCell.xib in Resources */,
 				18CCB700242CA58A00F06CB1 /* ChooseTypeView.xib in Resources */,
 				18CCB70B242CA58A00F06CB1 /* ExpressView.xib in Resources */,
@@ -1081,6 +1107,7 @@
 				189329962331E90B0009BBB3 /* emptyCommentView.xib in Resources */,
 				189329972331E90B0009BBB3 /* emptyView.xib in Resources */,
 				18D3BC7A24342AA000EA4F70 /* PresentViewController.xib in Resources */,
+				18E1405224AF1BC1008CEFBC /* ChooseProdModelView.xib in Resources */,
 				18B5D2452431DDD10002D923 /* ChooseAccessoryView.xib in Resources */,
 				18CEA5962435CDE10079DA1B /* V3_OrderTableViewCell.xib in Resources */,
 				18AF39D524458D7C001467BC /* MarginView.xib in Resources */,
@@ -1095,6 +1122,7 @@
 				185D6985244469780055D704 /* NoMsgView.xib in Resources */,
 				18D93B8F2429FD840046F87A /* BindPhoneViewController.xib in Resources */,
 				18B9D8FD244463EB005E440F /* MsgViewController.xib in Resources */,
+				18E1404A24AF1AD1008CEFBC /* ChooseProdCategoryView.xib in Resources */,
 				18D3BC7224342AA000EA4F70 /* AddCardViewController.xib in Resources */,
 				18CEA5862435BDC30079DA1B /* ChooseTypeView1.xib in Resources */,
 				18CCB720242CA58A00F06CB1 /* XgyOrderTableViewCell.xib in Resources */,
@@ -1295,6 +1323,7 @@
 				189329B82331E90B0009BBB3 /* TTHeadView.swift in Sources */,
 				18B9D8FA244463EB005E440F /* MsgTableViewCell.swift in Sources */,
 				18AF29DE2436E3ED00494375 /* SubOrderViewController2.swift in Sources */,
+				18E1404924AF1A90008CEFBC /* ChooseProdCategoryView.swift in Sources */,
 				18CCB71A242CA58A00F06CB1 /* XgyOrder.swift in Sources */,
 				18D3BC7B24342AA000EA4F70 /* RechargeViewController.swift in Sources */,
 				18CEA5982435CDE10079DA1B /* V3_OrderViewController.swift in Sources */,
@@ -1309,9 +1338,11 @@
 				18D3BC7524342AA000EA4F70 /* CardTableViewCell.swift in Sources */,
 				189329A32331E90B0009BBB3 /* AlamofireHelper.swift in Sources */,
 				18CCB71F242CA58A00F06CB1 /* XgyOrderTableViewCell.swift in Sources */,
+				18E1404D24AF1B05008CEFBC /* ChooseProdSpecificationsView.swift in Sources */,
 				18CEA5852435BA480079DA1B /* ChooseTypeView1.swift in Sources */,
 				1893299C2331E90B0009BBB3 /* ImagePreviewCell.swift in Sources */,
 				189329A92331E90B0009BBB3 /* HUD.swift in Sources */,
+				18E1404524AF15E1008CEFBC /* ChooseCommonView.swift in Sources */,
 				18CCB724242CA6FA00F06CB1 /* PPNumberButton.swift in Sources */,
 				189329B32331E90B0009BBB3 /* LBXScanNetAnimation.swift in Sources */,
 				18B9D8FC244463EB005E440F /* MsgViewController.swift in Sources */,
@@ -1362,6 +1393,7 @@
 				18D3BC7324342AA000EA4F70 /* CardFooterView.swift in Sources */,
 				18CCB703242CA58A00F06CB1 /* AccessoryTableViewCell.swift in Sources */,
 				189329B12331E90B0009BBB3 /* LBXPermissions.swift in Sources */,
+				18E1405124AF1B7F008CEFBC /* ChooseProdModelView.swift in Sources */,
 				18CEA59E2435DC2F0079DA1B /* LoginViewController2.swift in Sources */,
 				18D3BC4F24342AA000EA4F70 /* FeedbackViewController.swift in Sources */,
 				18CCB746242CAC9300F06CB1 /* AddressTableViewCell.swift in Sources */,
@@ -1529,8 +1561,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = factory/factory.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DQW5625LLJ;
 				INFOPLIST_FILE = factory/Info.plist;
@@ -1539,10 +1571,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhkj.factory;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "发布证书";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1555,8 +1587,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = factory/factory.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DQW5625LLJ;
 				INFOPLIST_FILE = factory/Info.plist;
@@ -1565,10 +1597,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.zhkj.factory;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "发布证书";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

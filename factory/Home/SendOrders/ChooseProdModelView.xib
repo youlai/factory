@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ChooseProdModelView" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="622"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="UQd-yO-SEa">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="622"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <connections>
+                        <outlet property="dataSource" destination="iN0-l3-epB" id="rFT-Nf-lgO"/>
+                        <outlet property="delegate" destination="iN0-l3-epB" id="MsF-eg-xX3"/>
+                    </connections>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="UQd-yO-SEa" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Vb7-MK-JWw"/>
+                <constraint firstAttribute="trailing" secondItem="UQd-yO-SEa" secondAttribute="trailing" id="ehn-aK-QYb"/>
+                <constraint firstItem="UQd-yO-SEa" firstAttribute="bottom" secondItem="iN0-l3-epB" secondAttribute="bottom" id="iZD-zF-8vR"/>
+                <constraint firstItem="UQd-yO-SEa" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="njB-KB-I2G"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="tableview" destination="UQd-yO-SEa" id="jlz-vf-fYq"/>
+            </connections>
+            <point key="canvasLocation" x="150.72463768115944" y="-153.34821428571428"/>
+        </view>
+    </objects>
+</document>

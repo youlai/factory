@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftyJSON
+import Alamofire
 
 class Repair_SendOrderViewController: UIViewController,LBXScanViewControllerDelegate {
     func scanFinished(scanResult: LBXScanResult, error: String?) {
@@ -18,11 +19,16 @@ class Repair_SendOrderViewController: UIViewController,LBXScanViewControllerDele
     @IBOutlet weak var contentview: UIView!
     @IBOutlet weak var scrollview: UIScrollView!
     
+    @IBOutlet weak var uv_common: UIView!
+    @IBOutlet weak var uv_cate: UIView!
+    @IBOutlet weak var uv_gg: UIView!
     @IBOutlet weak var uv_brand: UIView!
     @IBOutlet weak var uv_type: UIView!
     
     @IBOutlet weak var uv_yfpj: UIView!
     
+    @IBOutlet weak var btn_addbrand: UIButton!
+    @IBOutlet weak var btn_addprodmodel: UIButton!
     @IBOutlet weak var btn_addacc: UIButton!
     @IBOutlet weak var lb_acc: UILabel!
     @IBOutlet weak var uv_fc: UIView!
@@ -38,6 +44,9 @@ class Repair_SendOrderViewController: UIViewController,LBXScanViewControllerDele
     @IBOutlet weak var uv_scan: UIView!
     @IBOutlet weak var uv_time: UIView!
     
+    @IBOutlet weak var lb_common: UILabel!
+    @IBOutlet weak var lb_cate: UILabel!
+    @IBOutlet weak var lb_gg: UILabel!
     @IBOutlet weak var lb_brand: UILabel!
     @IBOutlet weak var lb_type: UILabel!
     
@@ -69,7 +78,11 @@ class Repair_SendOrderViewController: UIViewController,LBXScanViewControllerDele
     
     
     var popviewOfBrand: ZXPopView!
+    var chooseCommonView: ChooseCommonView!
+    var chooseProdCategoryView: ChooseProdCategoryView!
+    var chooseProdSpecificationsView: ChooseProdSpecificationsView!
     var chooseBrandView: ChooseBrandView!
+    var chooseProdModelView: ChooseProdModelView!
     
     var popviewOfType: ZXPopView!
     var chooseTypeView: ChooseTypeView!
@@ -78,7 +91,16 @@ class Repair_SendOrderViewController: UIViewController,LBXScanViewControllerDele
     var chooseTimeView: ChooseTimeView!
     
     var brand: BrandOfxgy!//选中的品牌
-    var type: CateOfxgy!//选中的类型
+    var prodCommon: ProdCommon!//选中的常用型号
+    var prodCategory: ProdCategory!//选中的分类
+    var prodSpecifications: ProdSpecifications!//选中的规格
+    var prodModel: ProdModel!//选中的型号
+    
+    var subid: Int!//选中的分类ID
+    var spid: Int!//选中的规格ID
+    var brandid: Int!//选中的品牌ID
+    var modelid: Int!//选中的型号ID
+    
     var time: String!//选中的上门时间
     var name: String!//姓名
     var phone: String!//手机
@@ -91,7 +113,7 @@ class Repair_SendOrderViewController: UIViewController,LBXScanViewControllerDele
     
     var IsRecevieGoods="N"//是否已发配件 N否 Y是
     
-    var Guarantee="Y"//Y保内 N保外
+    var Guarantee="1"//1保内 2保外
     var AddressBack=""//旧件地址
     var PostPayType="1"//1到付 2现付
     var IsReturn="2"//1返件  2不返件
@@ -128,6 +150,13 @@ class Repair_SendOrderViewController: UIViewController,LBXScanViewControllerDele
         uv_brand.addOnClickListener(target: self, action: #selector(getFactoryBrandByUserID))
         uv_type.addOnClickListener(target: self, action: #selector(getType))
         
+        uv_common.addOnClickListener(target: self, action: #selector(getFactoryProd))
+        uv_cate.addOnClickListener(target: self, action: #selector(getProdCategory))
+        uv_gg.addOnClickListener(target: self, action: #selector(getProdSpecifications))
+        
+        btn_addbrand.addOnClickListener(target: self, action: #selector(addBrand))
+        btn_addprodmodel.addOnClickListener(target: self, action: #selector(addProdModel))
+        
         uv_addr.addOnClickListener(target: self, action: #selector(chooseAddr))
         btn_fjaddr.addOnClickListener(target: self, action: #selector(changeAddr))
         check_yqs.addOnClickListener(target: self, action: #selector(qs))
@@ -145,6 +174,76 @@ class Repair_SendOrderViewController: UIViewController,LBXScanViewControllerDele
         btn_addacc.addOnClickListener(target: self, action: #selector(add_accessory))
         NotificationCenter.default.addObserver(self, selector: #selector(update), name: NSNotification.Name("choose"), object: nil)
     }
+    //MARK:添加品牌
+    @objc func addBrand(){
+            let alertController = UIAlertController(title: "添加品牌", message: "请输入品牌名称", preferredStyle: UIAlertController.Style.alert);
+            alertController.addTextField { (textField:UITextField!) -> Void in
+                textField.placeholder = "品牌名称";
+            }
+            let cancelAction = UIAlertAction(title: "取消", style: UIAlertAction.Style.cancel, handler: nil )
+            let okAction = UIAlertAction(title: "确认", style: UIAlertAction.Style.default) { (ACTION) -> Void in
+                let tf_name = alertController.textFields!.first! as UITextField
+                if tf_name.text!.isEmpty{
+                    HUD.showText("不能为空")
+                    return
+                }
+                let d = [
+                         "brandName":tf_name.text!
+                ]
+                AlamofireHelper.post(url: AddBrand, parameters: d, successHandler: {[weak self](res)in
+                    HUD.dismiss()
+                    guard let ss = self else {return}
+                    if res["Data"]["status"].boolValue{
+                        HUD.showText("添加品牌成功")
+                    }else{
+                        HUD.showText(res["Data"]["msg"].stringValue)
+                    }
+                }){[weak self] (error) in
+                    HUD.dismiss()
+                    guard let ss = self else {return}
+                }
+            }
+            alertController.addAction(cancelAction);
+            alertController.addAction(okAction);
+            self.present(alertController, animated: true, completion: nil)
+    }
+    //MARK:添加型号
+    @objc func addProdModel(){
+        if spid==nil{
+            HUD.showText("请先选择规格")
+            return
+        }
+            let alertController = UIAlertController(title: "添加型号", message: "请输入型号名称", preferredStyle: UIAlertController.Style.alert);
+            alertController.addTextField { (textField:UITextField!) -> Void in
+                textField.placeholder = "型号名称";
+            }
+            let cancelAction = UIAlertAction(title: "取消", style: UIAlertAction.Style.cancel, handler: nil )
+            let okAction = UIAlertAction(title: "确认", style: UIAlertAction.Style.default) { (ACTION) -> Void in
+                let tf_name = alertController.textFields!.first! as UITextField
+                if tf_name.text!.isEmpty{
+                    HUD.showText("不能为空")
+                    return
+                }
+                let d = ["specificationsID":self.spid!,
+                         "prodModel":tf_name.text!
+                    ] as [String : Any]
+                AlamofireHelper.post(url: AddProdModel, parameters: d, successHandler: {[weak self](res)in
+                    HUD.dismiss()
+                    guard let ss = self else {return}
+                    if res["Data"]["status"].boolValue{
+                        HUD.showText("添加型号成功")
+                    }else{
+                        HUD.showText(res["Data"]["msg"].stringValue)
+                    }
+                }){[weak self] (error) in
+                    HUD.dismiss()
+                    guard let ss = self else {return}
+                }
+            }
+            alertController.addAction(cancelAction);
+            alertController.addAction(okAction);
+            self.present(alertController, animated: true, completion: nil)
+    }
     //MARK:旧件地址修改
     @objc func changeAddr(){
         self.navigationController?.pushViewController(AddressViewController(choose: true), animated: true)
@@ -157,12 +256,12 @@ class Repair_SendOrderViewController: UIViewController,LBXScanViewControllerDele
     }
     //MARK:添加配件
     @objc func add_accessory(){
-        if type==nil{
-            HUD.showText("请选择型号")
+        if spid==nil{
+            HUD.showText("请选择规格")
             return
         }
-        let d = ["FCategoryID":"\(type.ProductTypeID)"]
-        AlamofireHelper.post(url: GetFactoryAccessory, parameters: d, successHandler: {[weak self](res)in
+        let d = ["FCategoryID":spid]
+        AlamofireHelper.post(url: GetFactoryAccessory, parameters: d as [String : Any], successHandler: {[weak self](res)in
             HUD.dismiss()
             guard let ss = self else {return}
             ss.selectedIndexs.removeAll()
@@ -303,12 +402,12 @@ class Repair_SendOrderViewController: UIViewController,LBXScanViewControllerDele
     //MARK:保内保外
     @objc func bnw(){
         
-        if Guarantee == "N"{
-            Guarantee="Y"
+        if Guarantee == "2"{
+            Guarantee="1"
             iv_bn.image=UIImage(named: "yuangou")
             iv_bw.image=UIImage(named: "circle")
         }else{
-            Guarantee="N"
+            Guarantee="2"
             iv_bn.image=UIImage(named: "circle")
             iv_bw.image=UIImage(named: "yuangou")
         }
@@ -326,12 +425,8 @@ class Repair_SendOrderViewController: UIViewController,LBXScanViewControllerDele
             alert.alpha = 0
             UIApplication.shared.keyWindow?.addSubview(alert)
             alert.selectAddress = {(select:(Street,String,(Province,City,Area,Street))) -> Void in
-                ss.addr = select.1
+                ss.addr = "\(select.2.0.name ?? "")/\(select.2.1.name ?? "")/\(select.2.2.name ?? "")/\(select.2.3.name ?? "")"
                 ss.lb_addr.text = select.1
-                ss.provinceCode=select.2.0.code!
-                ss.cityCode=select.2.1.code!
-                ss.areaCode=select.2.2.code!
-                ss.streetCode=select.2.3.code!
             }
             alert.initprovince(addressModel: res["Data"].arrayValue.compactMap({ Province(json: $0)}))
             alert.showView()
@@ -342,41 +437,19 @@ class Repair_SendOrderViewController: UIViewController,LBXScanViewControllerDele
     }
     //MARK:确认提交
     @objc func submit(){
-        /**
-         * 发布工单
-         * TypeID;//分类ID 1维修 2安装 3其他服务
-         * TypeName;//
-         * UserID;//用户id
-         * FBrandID;//品牌id
-         * FBrandName;//品牌名
-         * FCategoryID;//分类id
-         * FCategoryName;//分类名
-         * FProductTypeID;//型号id
-         * FProductType;//型号名
-         * ProvinceCode;//省code
-         * CityCode;//市code
-         * AreaCode;//区code
-         * Address;//详细地址
-         * UserName;//客户姓名
-         * Phone;//客户手机
-         * Memo;//故障描述
-         * RecycleOrderHour;//回收时间
-         * Guarantee;//保内Y保外N
-         * AccessorySendState;//是否已发配件 Y是N否
-         * Extra;//是否加急Y是N否
-         * ExtraTime;//加急时间
-         * ExtraFee;//加急费用
-         * Num;//数量
-         * IsRecevieGoods;//是否签收产品 Y是N否
-         * ExpressNo;//快递单号
-         * MallID;//商城订单号
-         * OrderSource;//订单来源 商城传“Mall”
-         */
-        if brand==nil{
+        if subid==nil{
+            HUD.showText("请选择分类!")
+            return
+        }
+        if spid==nil{
+            HUD.showText("请选择规格!")
+            return
+        }
+        if brandid==nil{
             HUD.showText("请选择品牌!")
             return
         }
-        if type==nil{
+        if modelid==nil{
             HUD.showText("请选择型号!")
             return
         }
@@ -422,71 +495,80 @@ class Repair_SendOrderViewController: UIViewController,LBXScanViewControllerDele
             return
         }
         var d = [
-            "TypeID":"1",
-            "TypeName":"维修",
-            "UserID":UserID!,
-            "BrandID":brand.FBrandID,
-            "BrandName":brand.FBrandName!,
-            "CategoryID":type.CategoryID,
-            "CategoryName":type.CategoryName!,
-            "SubCategoryID":type.SubCategoryID,
-            "SubCategoryName":type.SubCategoryName!,
-            "ProductTypeID":type.ProductTypeID, //三级
-            "ProductType":type.ProductTypeName!,
-            "ProvinceCode":provinceCode!,
-            "CityCode":cityCode!,
-            "AreaCode":areaCode!,
-            "DistrictCode":streetCode!,
-            "Address":"\(addr!)\(addr_detail!)",
-            "UserName":name!,
-            "Phone":phone!,
-            "Memo":Memo!,
-            "RecycleOrderHour":"48",
-            "Guarantee":Guarantee,//保内外
-            "AccessorySendState": "N",
-            "Extra":Extra,
-            "ExtraTime":ExtraTime,
-            "ExtraFee":ExtraFee,
+            "phone":phone!,
+            "name":name!,
+            "city":addr!,
+            "addstr":addr_detail!,
+            "servicetype":"1",
+            "guaranteetype":Guarantee,
+            "subCategoryID":subid!,
+            "specifications":spid!,
+            "factoryBrandName":brandid!,
+            "prodModel":modelid!,
+            "parts":IsRecevieGoods,
+            "bak":Memo!,
             "Num":Num,
-            "IsRecevieGoods":IsRecevieGoods,
-            "OrderSource":"IOS厂商端",
             "ContinueIssuing":ContinueIssuing
             ] as [String : Any]
         if IsRecevieGoods=="Y"{//已发配件
             d["ExpressNo"]=ExpressNo//快递单号
-            d["IsReturn"]=IsReturn//是否返件 (1返,2不返)
+            d["backParts"]=IsReturn//是否返件 (1返,2不返)
             if IsReturn=="1"{
-                d["PostPayType"]=PostPayType//1到付，2现付
-                d["AddressBack"]=AddressBack//旧配件返件地址、联系人、电话号码
+                d["postpaytype"]=PostPayType//1到付，2现付
+                d["backAddress"]=AddressBack//旧配件返件地址、联系人、电话号码
             }
             if acc_list.count==0 {
-                d["OrderAccessoryStr"]=""
+                d["partsVal"]=""
             }else{
-                d["OrderAccessoryStr"]=self.OrderAccessoryStr!
+                var acc=[Any]()
+                for item in acc_list {
+                    acc.append(["name":item.AccessoryName!,"value":item.FAccessoryID])
+                }
+                d["partsVal"]=acc
             }
         }
         print(d)
-        AlamofireHelper.post(url: AddOrder, parameters: d, successHandler: {[weak self](res)in
-            HUD.dismiss()
-            guard let ss = self else {return}
-            if res["Data"]["Item1"].boolValue{
-                HUD.showText(res["Data"]["Item2"].stringValue)
-                ss.navigationController?.popViewController(animated: true)
-            }else{
-                if res["Data"]["Item2"].stringValue=="账户可用余额小于工单金额"{
-                    ss.toRecharge()
-                }else if res["Data"]["Item2"].stringValue=="该用户已有工单"{
-                    ss.showrepeat()
-                }else if res["Data"]["Item2"].stringValue=="保证金低于最低需缴纳金额"{
-                    ss.toMargin()
-                }else{
-                    HUD.showText(res["Data"]["Item2"].stringValue)
+//        AlamofireHelper.post(url: AddOrder, parameters: d, successHandler: {[weak self](res)in
+//            HUD.dismiss()
+//            guard let ss = self else {return}
+//            if res["Data"]["status"].boolValue{
+//                HUD.showText(res["Data"]["msg"].stringValue)
+//                ss.navigationController?.popViewController(animated: true)
+//            }else{
+//                HUD.showText(res["Data"]["msg"].stringValue)
+//            }
+//        }){[weak self] (error) in
+//            HUD.dismiss()
+//            guard let ss = self else {return}
+//        }
+        guard AddOrder.lengthOfBytes(using: String.Encoding.utf8) > 0 else { return}
+                var header:HTTPHeaders = [:]
+                if  (UserID != nil) {
+                    header["userName"] = UserID
+                    header["adminToken"] = adminToken
                 }
-            }
-        }){[weak self] (error) in
-            HUD.dismiss()
-            guard let ss = self else {return}
-        }
+                
+        Alamofire.request(AddOrder, method:.post, parameters: d, encoding:JSONEncoding.default, headers: header)
+                    .validate()
+                    .responseJSON { (dataResponse) in
+                        DispatchQueue.main.async {
+                            switch dataResponse.result {
+                            case .success(let value):
+                                let jsonData = JSON.init(value as Any)
+                                if jsonData["Data"]["status"].boolValue{
+                                    HUD.showText(jsonData["Data"]["msg"].stringValue)
+                                    self.navigationController?.popViewController(animated: true)
+                                }else{
+                                    HUD.showText(jsonData["Data"]["msg"].stringValue)
+                                }
+                                break
+                                
+                            case .failure(let error):
+                                HUD.showText("服务器错误")
+                                break
+                            }
+                        }
+                }
     }
     //MARK:余额不足是否前往充值
     @objc func toRecharge(){
@@ -523,19 +605,9 @@ class Repair_SendOrderViewController: UIViewController,LBXScanViewControllerDele
         self.present(alertVC, animated: true, completion: nil)
     }
 }
+
 //MARK:选择品牌
 extension Repair_SendOrderViewController{
-    //MARK:未添加品牌是否去添加品牌
-    @objc func noBrand(){
-        let alertVC : UIAlertController = UIAlertController.init(title: "你还未添加品牌，是否去添加？", message: "", preferredStyle: .alert)
-        let falseAA : UIAlertAction = UIAlertAction.init(title: "取消", style: .cancel, handler: nil)
-        let trueAA : UIAlertAction = UIAlertAction.init(title: "确定", style: .default) { (alertAction) in
-            self.navigationController?.pushViewController(BrandViewController(), animated: true)
-        }
-        alertVC.addAction(falseAA)
-        alertVC.addAction(trueAA)
-        self.present(alertVC, animated: true, completion: nil)
-    }
     @objc func getFactoryBrandByUserID(){
         let d = ["UserID":UserID!]
         AlamofireHelper.post(url: GetFactoryBrandByUserID, parameters: d, successHandler: {[weak self](res)in
@@ -545,16 +617,15 @@ extension Repair_SendOrderViewController{
             ss.chooseBrandView=Bundle.main.loadNibNamed("ChooseBrandView", owner: nil, options: nil)?[0] as? ChooseBrandView
             ss.chooseBrandView.brandList=res["Data"].arrayValue.compactMap({ BrandOfxgy(json: $0)})
             if ss.chooseBrandView.brandList.count==0{
-                ss.noBrand()
+                HUD.showText("无品牌")
                 return
             }
             ss.chooseBrandView.tableview.reloadData()
             ss.chooseBrandView.tableview.separatorStyle = .none
             ss.chooseBrandView.brandSelect={ (brand:BrandOfxgy) -> Void in
                 ss.brand=brand
+                ss.brandid=brand.FBrandID
                 ss.lb_brand.text=brand.FBrandName
-                ss.type=nil
-                ss.lb_type.text=""
                 ss.popviewOfBrand.dismissView()
             }
             ss.chooseBrandView.clipsToBounds=true
@@ -578,49 +649,181 @@ extension Repair_SendOrderViewController{
         popviewOfBrand.dismissView()
     }
 }
-//MARK:选择型号
+//MARK:选择常用型号
 extension Repair_SendOrderViewController{
-    //MARK:未添加型号是否去添加型号
-    @objc func noType(){
-        let alertVC : UIAlertController = UIAlertController.init(title: "你该品牌下未添加型号，是否去添加？", message: "", preferredStyle: .alert)
-        let falseAA : UIAlertAction = UIAlertAction.init(title: "取消", style: .cancel, handler: nil)
-        let trueAA : UIAlertAction = UIAlertAction.init(title: "确定", style: .default) { (alertAction) in
-            self.navigationController?.pushViewController(TypeViewController(), animated: true)
+    @objc func getFactoryProd(){
+        let d = ["searchName":""]
+        AlamofireHelper.post(url: GetFactoryProd, parameters: d, successHandler: {[weak self](res)in
+            HUD.dismiss()
+            guard let ss = self else {return}
+            ss.popviewOfBrand = ZXPopView.init(frame: ss.view.bounds)
+            ss.chooseCommonView=Bundle.main.loadNibNamed("ChooseCommonView", owner: nil, options: nil)?[0] as? ChooseCommonView
+            ss.chooseCommonView.brandList=res["Data"].arrayValue.compactMap({ ProdCommon(json: $0)})
+            if ss.chooseCommonView.brandList.count==0{
+                HUD.showText("无常用型号")
+                return
+            }
+            ss.chooseCommonView.tableview.reloadData()
+            ss.chooseCommonView.tableview.separatorStyle = .none
+            ss.chooseCommonView.brandSelect={ (brand:ProdCommon) -> Void in
+                ss.prodCommon=brand
+                
+                ss.subid=brand.SubCategoryID
+                ss.spid=brand.ProductTypeID
+                ss.brandid=brand.BrandID
+                ss.modelid=brand.ProdModelID
+                
+                ss.lb_common.text="\(brand.BrandName ?? "")-\(brand.ProdModel ?? "")"
+                ss.lb_cate.text=brand.SubCategoryName
+                ss.lb_gg.text=brand.ProductTypeName
+                ss.lb_brand.text=brand.BrandName
+                ss.lb_type.text=brand.ProdModel
+                ss.popviewOfBrand.dismissView()
+            }
+            ss.chooseCommonView.clipsToBounds=true
+            ss.chooseCommonView.layer.cornerRadius=10
+            ss.popviewOfBrand.contenView = ss.chooseCommonView
+            ss.popviewOfBrand.anim = 0
+            ss.chooseCommonView.snp.makeConstraints { (make) in
+                make.width.equalTo(screenW-20)
+                make.left.equalTo(10)
+                make.right.equalTo(-10)
+                make.height.equalTo(screenH/2)
+                make.center.equalToSuperview()
+            }
+            ss.popviewOfBrand.showInView(view: ss.view)
+        }){[weak self] (error) in
+            HUD.dismiss()
+            guard let ss = self else {return}
         }
-        alertVC.addAction(falseAA)
-        alertVC.addAction(trueAA)
-        self.present(alertVC, animated: true, completion: nil)
     }
-    @objc func getType(){
-        if brand==nil {
-            HUD.showText("请先选择品牌！")
+}
+//MARK:选择分类
+extension Repair_SendOrderViewController{
+    @objc func getProdCategory(){
+//        let d = ["searchName":""]
+        AlamofireHelper.post(url: GetProdCategory, parameters: nil, successHandler: {[weak self](res)in
+            HUD.dismiss()
+            guard let ss = self else {return}
+            ss.popviewOfBrand = ZXPopView.init(frame: ss.view.bounds)
+            ss.chooseProdCategoryView=Bundle.main.loadNibNamed("ChooseProdCategoryView", owner: nil, options: nil)?[0] as? ChooseProdCategoryView
+            ss.chooseProdCategoryView.brandList=res["Data"].arrayValue.compactMap({ ProdCategory(json: $0)})
+            if ss.chooseProdCategoryView.brandList.count==0{
+                HUD.showText("无分类")
+                return
+            }
+            ss.chooseProdCategoryView.tableview.reloadData()
+            ss.chooseProdCategoryView.tableview.separatorStyle = .none
+            ss.chooseProdCategoryView.brandSelect={ (brand:ProdCategory) -> Void in
+                ss.prodCategory=brand
+                ss.subid=brand.SpecificationsID
+                ss.spid=nil
+                ss.modelid=nil
+                ss.prodSpecifications=nil
+                ss.prodModel=nil
+                ss.lb_cate.text=brand.FCategoryName
+                ss.lb_gg.text=""
+                ss.lb_type.text=""
+                ss.popviewOfBrand.dismissView()
+            }
+            ss.chooseProdCategoryView.clipsToBounds=true
+            ss.chooseProdCategoryView.layer.cornerRadius=10
+            ss.popviewOfBrand.contenView = ss.chooseProdCategoryView
+            ss.popviewOfBrand.anim = 0
+            ss.chooseProdCategoryView.snp.makeConstraints { (make) in
+                make.width.equalTo(screenW-20)
+                make.left.equalTo(10)
+                make.right.equalTo(-10)
+                make.height.equalTo(screenH/2)
+                make.center.equalToSuperview()
+            }
+            ss.popviewOfBrand.showInView(view: ss.view)
+        }){[weak self] (error) in
+            HUD.dismiss()
+            guard let ss = self else {return}
+        }
+    }
+}
+//MARK:选择规格
+extension Repair_SendOrderViewController{
+    @objc func getProdSpecifications(){
+        if subid==nil{
+            HUD.showText("请先选择分类！")
             return
         }
-        let d = ["UserID":UserID!,
-                 "BrandID":"\(brand.FBrandID)",
+        let d = ["subCategoryID":subid]
+        AlamofireHelper.post(url: GetProdSpecifications, parameters: d, successHandler: {[weak self](res)in
+            HUD.dismiss()
+            guard let ss = self else {return}
+            ss.popviewOfBrand = ZXPopView.init(frame: ss.view.bounds)
+            ss.chooseProdSpecificationsView=Bundle.main.loadNibNamed("ChooseProdSpecificationsView", owner: nil, options: nil)?[0] as? ChooseProdSpecificationsView
+            ss.chooseProdSpecificationsView.brandList=res["Data"].arrayValue.compactMap({ ProdSpecifications(json: $0)})
+            if ss.chooseProdSpecificationsView.brandList.count==0{
+                HUD.showText("无规格")
+                return
+            }
+            ss.chooseProdSpecificationsView.tableview.reloadData()
+            ss.chooseProdSpecificationsView.tableview.separatorStyle = .none
+            ss.chooseProdSpecificationsView.brandSelect={ (brand:ProdSpecifications) -> Void in
+                ss.prodSpecifications=brand
+                ss.spid=brand.SpecificationsID
+                ss.modelid=nil
+                ss.prodModel=nil
+                ss.lb_gg.text=brand.FCategoryName
+                ss.lb_type.text=""
+                ss.popviewOfBrand.dismissView()
+            }
+            ss.chooseProdSpecificationsView.clipsToBounds=true
+            ss.chooseProdSpecificationsView.layer.cornerRadius=10
+            ss.popviewOfBrand.contenView = ss.chooseProdSpecificationsView
+            ss.popviewOfBrand.anim = 0
+            ss.chooseProdSpecificationsView.snp.makeConstraints { (make) in
+                make.width.equalTo(screenW-20)
+                make.left.equalTo(10)
+                make.right.equalTo(-10)
+                make.height.equalTo(screenH/2)
+                make.center.equalToSuperview()
+            }
+            ss.popviewOfBrand.showInView(view: ss.view)
+        }){[weak self] (error) in
+            HUD.dismiss()
+            guard let ss = self else {return}
+        }
+    }
+}
+//MARK:选择型号
+extension Repair_SendOrderViewController{
+    @objc func getType(){
+        if spid==nil {
+            HUD.showText("请先选择规格！")
+            return
+        }
+        let d = ["specificationsID":spid
         ]
-        AlamofireHelper.post(url: GetBrandWithCategory, parameters: d, successHandler: {[weak self](res)in
+        print(d)
+        AlamofireHelper.post(url: GetProdModel, parameters: d, successHandler: {[weak self](res)in
             HUD.dismiss()
             guard let ss = self else {return}
             ss.popviewOfType = ZXPopView.init(frame: ss.view.bounds)
-            ss.chooseTypeView=Bundle.main.loadNibNamed("ChooseTypeView", owner: nil, options: nil)?[0] as? ChooseTypeView
-            ss.chooseTypeView.cateList=res["Data"]["Item2"].arrayValue.compactMap({ CateOfxgy(json: $0)})
-            if ss.chooseTypeView.cateList.count==0{
-                ss.noType()
+            ss.chooseProdModelView=Bundle.main.loadNibNamed("ChooseProdModelView", owner: nil, options: nil)?[0] as? ChooseProdModelView
+            ss.chooseProdModelView.brandList=res["Data"].arrayValue.compactMap({ ProdModel(json: $0)})
+            if ss.chooseProdModelView.brandList.count==0{
+                HUD.showText("无型号")
                 return
             }
-            ss.chooseTypeView.tableview.reloadData()
-            ss.chooseTypeView.tableview.separatorStyle = .none
-            ss.chooseTypeView.cateSelect={ (cate:CateOfxgy) -> Void in
-                ss.type=cate
-                ss.lb_type.text="\(cate.CategoryName!)/\(cate.SubCategoryName!)/\(cate.ProductTypeName!)"
+            ss.chooseProdModelView.tableview.reloadData()
+            ss.chooseProdModelView.tableview.separatorStyle = .none
+            ss.chooseProdModelView.brandSelect={ (cate:ProdModel) -> Void in
+                ss.prodModel=cate
+                ss.modelid=cate.ID
+                ss.lb_type.text=cate.ModelName
                 ss.popviewOfType.dismissView()
             }
-            ss.chooseTypeView.clipsToBounds=true
-            ss.chooseTypeView.layer.cornerRadius=10
-            ss.popviewOfType.contenView = ss.chooseTypeView
+            ss.chooseProdModelView.clipsToBounds=true
+            ss.chooseProdModelView.layer.cornerRadius=10
+            ss.popviewOfType.contenView = ss.chooseProdModelView
             ss.popviewOfType.anim = 0
-            ss.chooseTypeView.snp.makeConstraints { (make) in
+            ss.chooseProdModelView.snp.makeConstraints { (make) in
                 make.width.equalTo(screenW-20)
                 make.left.equalTo(10)
                 make.right.equalTo(-10)
@@ -688,7 +891,14 @@ extension Repair_SendOrderViewController{
     }
 }
 
-
+struct Acc:JSONSerializable {
+    var name: String
+    var value: Int
+    init(name:String,value:Int){
+        self.name=name
+        self.value=value
+    }
+}
 
 struct Accessory {
     var count: Int=1 //配件数量
@@ -782,5 +992,246 @@ struct OrderAccessoryModel:JSONSerializable {
         self.NeedPlatformAuth=NeedPlatformAuth
         self.SendState=SendState
         self.Relation=Relation
+    }
+}
+//MARK:常用型号
+struct ProdCommon {
+//    {
+//      "UserID" : "18888888888",
+//      "limit" : 999,
+//      "ProdModelID" : 26,
+//      "BrandCategoryID" : 542,
+//      "ProdModel" : "测试型号",
+//      "BrandName" : "奥克斯",
+//      "CategoryName" : "冰洗类",
+//      "BrandID" : 308,
+//      "ProductTypeName" : "卧式冷柜≤300升",
+//      "ProductTypeID" : 263,
+//      "IsUse" : "Y",
+//      "UseNum" : 17,
+//      "SubCategoryName" : "冷柜",
+//      "SubCategoryID" : 262,
+//      "CourseCount" : null,
+//      "Id" : 542,
+//      "Imge" : null,
+//      "CategoryID" : 287,
+//      "page" : 1,
+//      "Version" : 0
+//    }
+    var UseNum: Int = 0
+    var UserID: String?
+    var SubCategoryID: Int = 0
+    var SubCategoryName: String?
+    var BrandID: Int = 0
+    var CourseCount: String?
+    var Imge: String?
+    var limit: Int = 0
+    var Version: Int = 0
+    var page: Int = 0
+    var BrandName: String?
+    var ProdModelID: Int = 0
+    var ProductTypeID: Int = 0
+    var CategoryName: String?
+    var Id: Int = 0
+    var IsUse: String?
+    var BrandCategoryID: Int = 0
+    var CategoryID: Int = 0
+    var ProdModel: String?
+    var ProductTypeName: String?
+
+    init(json: JSON) {
+        UseNum = json["UseNum"].intValue
+        UserID = json["UserID"].stringValue
+        SubCategoryID = json["SubCategoryID"].intValue
+        SubCategoryName = json["SubCategoryName"].stringValue
+        BrandID = json["BrandID"].intValue
+        CourseCount = json["CourseCount"].stringValue
+        Imge = json["Imge"].stringValue
+        limit = json["limit"].intValue
+        Version = json["Version"].intValue
+        page = json["page"].intValue
+        BrandName = json["BrandName"].stringValue
+        ProdModelID = json["ProdModelID"].intValue
+        ProductTypeID = json["ProductTypeID"].intValue
+        CategoryName = json["CategoryName"].stringValue
+        Id = json["Id"].intValue
+        IsUse = json["IsUse"].stringValue
+        BrandCategoryID = json["BrandCategoryID"].intValue
+        CategoryID = json["CategoryID"].intValue
+        ProdModel = json["ProdModel"].stringValue
+        ProductTypeName = json["ProductTypeName"].stringValue
+    }
+}
+//MARK:分类
+struct ProdCategory {
+//    {
+//      "PlatformFee" : 0,
+//      "CompanyName" : null,
+//      "UserID" : null,
+//      "StandardPrice" : 0,
+//      "limit" : 0,
+//      "CreateDate" : null,
+//      "FSpecificationsID" : 0,
+//      "SpecificationsID" : 262,
+//      "IsUse" : "Y",
+//      "ParentID" : 0,
+//      "Operator" : null,
+//      "TypeName" : null,
+//      "FactoryAccessorys" : null,
+//      "FactoryServices" : null,
+//      "Id" : 0,
+//      "PriceType" : 0,
+//      "Guarantee" : null,
+//      "FCategoryName" : "冷柜",
+//      "page" : 0,
+//      "Version" : 0,
+//      "FactoryPrice" : 0
+//    }
+    var IsUse: String?
+    var limit: Int = 0
+    var StandardPrice: Int = 0
+    var FactoryServices: String?
+    var FactoryPrice: Int = 0
+    var CompanyName: String?
+    var FSpecificationsID: Int = 0
+    var CreateDate: String?
+    var Operator: String?
+    var UserID: String?
+    var SpecificationsID: Int = 0
+    var PriceType: Int = 0
+    var Guarantee: String?
+    var Version: Int = 0
+    var PlatformFee: Int = 0
+    var FCategoryName: String?
+    var TypeName: String?
+    var ParentID: Int = 0
+    var FactoryAccessorys: String?
+    var Id: Int = 0
+    var page: Int = 0
+
+    init(json: JSON) {
+        IsUse = json["IsUse"].stringValue
+        limit = json["limit"].intValue
+        StandardPrice = json["StandardPrice"].intValue
+        FactoryServices = json["FactoryServices"].stringValue
+        FactoryPrice = json["FactoryPrice"].intValue
+        CompanyName = json["CompanyName"].stringValue
+        FSpecificationsID = json["FSpecificationsID"].intValue
+        CreateDate = json["CreateDate"].stringValue
+        Operator = json["Operator"].stringValue
+        UserID = json["UserID"].stringValue
+        SpecificationsID = json["SpecificationsID"].intValue
+        PriceType = json["PriceType"].intValue
+        Guarantee = json["Guarantee"].stringValue
+        Version = json["Version"].intValue
+        PlatformFee = json["PlatformFee"].intValue
+        FCategoryName = json["FCategoryName"].stringValue
+        TypeName = json["TypeName"].stringValue
+        ParentID = json["ParentID"].intValue
+        FactoryAccessorys = json["FactoryAccessorys"].stringValue
+        Id = json["Id"].intValue
+        page = json["page"].intValue
+    }
+}
+//MARK:规格
+struct ProdSpecifications {
+//    {
+//      "PlatformFee" : 0,
+//      "CompanyName" : null,
+//      "UserID" : null,
+//      "StandardPrice" : 0,
+//      "limit" : 0,
+//      "CreateDate" : null,
+//      "FSpecificationsID" : 0,
+//      "SpecificationsID" : 263,
+//      "IsUse" : "Y",
+//      "ParentID" : 0,
+//      "Operator" : null,
+//      "TypeName" : null,
+//      "FactoryAccessorys" : null,
+//      "FactoryServices" : null,
+//      "Id" : 0,
+//      "PriceType" : 0,
+//      "Guarantee" : null,
+//      "FCategoryName" : "卧式冷柜≤300升",
+//      "page" : 0,
+//      "Version" : 0,
+//      "FactoryPrice" : 0
+//    }
+    var FactoryServices: String?
+    var FactoryPrice: Int = 0
+    var Operator: String?
+    var CreateDate: String?
+    var UserID: String?
+    var SpecificationsID: Int = 0
+    var FSpecificationsID: Int = 0
+    var Id: Int = 0
+    var limit: Int = 0
+    var Guarantee: String?
+    var FCategoryName: String?
+    var FactoryAccessorys: String?
+    var page: Int = 0
+    var Version: Int = 0
+    var TypeName: String?
+    var StandardPrice: Int = 0
+    var ParentID: Int = 0
+    var IsUse: String?
+    var PlatformFee: Int = 0
+    var CompanyName: String?
+    var PriceType: Int = 0
+
+    init(json: JSON) {
+        FactoryServices = json["FactoryServices"].stringValue
+        FactoryPrice = json["FactoryPrice"].intValue
+        Operator = json["Operator"].stringValue
+        CreateDate = json["CreateDate"].stringValue
+        UserID = json["UserID"].stringValue
+        SpecificationsID = json["SpecificationsID"].intValue
+        FSpecificationsID = json["FSpecificationsID"].intValue
+        Id = json["Id"].intValue
+        limit = json["limit"].intValue
+        Guarantee = json["Guarantee"].stringValue
+        FCategoryName = json["FCategoryName"].stringValue
+        FactoryAccessorys = json["FactoryAccessorys"].stringValue
+        page = json["page"].intValue
+        Version = json["Version"].intValue
+        TypeName = json["TypeName"].stringValue
+        StandardPrice = json["StandardPrice"].intValue
+        ParentID = json["ParentID"].intValue
+        IsUse = json["IsUse"].stringValue
+        PlatformFee = json["PlatformFee"].intValue
+        CompanyName = json["CompanyName"].stringValue
+        PriceType = json["PriceType"].intValue
+    }
+}
+
+//MARK:品牌
+//MARK:型号
+struct ProdModel {
+//    {
+//      "IsUse" : "Y",
+//      "ModelName" : "测试型号",
+//      "Id" : 26,
+//      "FactoryID" : "18888888888",
+//      "Version" : 0,
+//      "SpecificationsID" : 263,
+//      "ID" : 26
+//    }
+    var ModelName: String?
+    var Id: Int = 0
+    var IsUse: String?
+    var SpecificationsID: Int = 0
+    var Version: Int = 0
+    var FactoryID: String?
+    var ID: Int = 0
+
+    init(json: JSON) {
+        ModelName = json["ModelName"].stringValue
+        Id = json["Id"].intValue
+        IsUse = json["IsUse"].stringValue
+        SpecificationsID = json["SpecificationsID"].intValue
+        Version = json["Version"].intValue
+        FactoryID = json["FactoryID"].stringValue
+        ID = json["ID"].intValue
     }
 }
